@@ -1,0 +1,21 @@
+{
+	"required": true,
+	"minVersion": "0.8",
+	"package": "de.siphalor.capsaicin.impl.mixin",
+	"compatibilityLevel": "JAVA_17",
+	"plugin": "de.siphalor.capsaicin.impl.mixin.CapsaicinMixinConfig",
+	"mixins": [
+		"MixinCatEntity",
+		"MixinHungerManager",
+		"MixinItem",
+		"MixinItemStack",
+		"MixinLivingEntity",
+		"MixinPlayerEntity",
+		"MixinWolfEntity"
+	],
+	"client": [
+	],
+	"injectors": {
+		"defaultRequire": 1
+	}
+}

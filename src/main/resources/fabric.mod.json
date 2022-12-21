@@ -1,0 +1,30 @@
+{
+	"schemaVersion": 1,
+	"id": "capsaicin",
+	"version": "${version}",
+	"name": "Capsaicin",
+	"description": "A library mod for dynamically modifying food data",
+	"authors": [
+		"Siphalor"
+	],
+	"contact": {
+		"website": "https://github.com/Siphalor/capsaicin",
+		"repo": "https://github.com/Siphalor/capsaicin"
+	},
+	"license": "Apache-2.0",
+	"icon": "assets/capsaicin/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"appleskin": [
+			"de.siphalor.capsaicin.impl.client.appleskin.AppleSkinPlugin"
+		]
+	},
+	"mixins": [
+		"capsaicin.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.14.12",
+		"fabric": "*",
+		"minecraft": "1.18.2"
+	}
+}
