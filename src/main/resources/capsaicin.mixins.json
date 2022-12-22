@@ -5,13 +5,12 @@
 	"compatibilityLevel": "JAVA_17",
 	"plugin": "de.siphalor.capsaicin.impl.mixin.CapsaicinMixinConfig",
 	"mixins": [
-		"MixinCatEntity",
 		"MixinHungerManager",
 		"MixinItem",
 		"MixinItemStack",
 		"MixinLivingEntity",
 		"MixinPlayerEntity",
-		"MixinWolfEntity"
+		"MixinFeedableEntities"
 	],
 	"client": [
 	],

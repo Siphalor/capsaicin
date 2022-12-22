@@ -21,15 +21,11 @@ public class FoodPropertiesImpl implements FoodProperties {
 	private List<Pair<StatusEffectInstance, Float>> statusEffects;
 
 	public static FoodPropertiesImpl from(FoodComponent foodComponent) {
-		List<Pair<StatusEffectInstance, Float>> oldStatusEffects = foodComponent.getStatusEffects();
-		List<Pair<StatusEffectInstance, Float>> statusEffects = new ArrayList<>(oldStatusEffects.size());
-		statusEffects.addAll(oldStatusEffects);
-
 		return new FoodPropertiesImpl(
 				foodComponent.getHunger(),
 				foodComponent.getSaturationModifier(),
 				foodComponent.isAlwaysEdible(),
-				statusEffects
+				new ArrayList<>(foodComponent.getStatusEffects())
 		);
 	}
 
