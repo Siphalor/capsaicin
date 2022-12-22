@@ -21,6 +21,23 @@ repositories {
 	}
 }
 
+sourceSets {
+	testmod {
+		compileClasspath += main.compileClasspath
+		runtimeClasspath += main.runtimeClasspath
+	}
+}
+
+loom {
+	runs {
+		testmodClient {
+			client()
+			name = "Testmod Client"
+			source sourceSets.testmod
+		}
+	}
+}
+
 dependencies {
 	// To change the versions see the gradle.properties file
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
@@ -33,6 +50,9 @@ dependencies {
 	// AppleSkin
 	modCompileOnly "squeek.appleskin:appleskin-fabric:mc1.18.2-2.4.0:api"
 	modLocalRuntime "squeek.appleskin:appleskin-fabric:mc1.18.2-2.4.0"
+
+	// Testmod stuff
+	testmodImplementation sourceSets.main.output
 }
 
 processResources {

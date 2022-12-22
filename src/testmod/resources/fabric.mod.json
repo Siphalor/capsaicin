@@ -1,0 +1,26 @@
+{
+	"schemaVersion": 1,
+	"id": "capsaicin-testmod",
+	"version": "${version}",
+	"name": "Capsaicin Testmod",
+	"description": "Testing Capsaicin capabilities",
+	"authors": [
+		"Siphalor"
+	],
+	"contact": {
+		"website": "https://github.com/Siphalor/capsaicin",
+		"repo": "https://github.com/Siphalor/capsaicin"
+	},
+	"license": "Apache-2.0",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"de.siphalor.capsaicin.testmod.CapsaicinTestmod"
+		]
+	},
+	"depends": {
+		"fabricloader": ">=0.14.12",
+		"fabric": "*",
+		"minecraft": "1.18.2"
+	}
+}
