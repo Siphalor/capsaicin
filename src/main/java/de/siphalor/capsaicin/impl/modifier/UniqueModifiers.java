@@ -8,6 +8,11 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
+/**
+ * A modifier registry that, only allows one modifier per identifier.
+ * @param <Value> The type of the value that is modified.
+ * @param <Context> The type of the context that is used for the modification.
+ */
 @ApiStatus.Internal
 public class UniqueModifiers<Value, Context> implements Modifiers<Value, Context> {
 	private final Set<Identifier> registeredIds = new HashSet<>();

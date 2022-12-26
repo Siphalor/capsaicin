@@ -10,6 +10,9 @@ import squeek.appleskin.api.food.FoodValues;
 
 import java.util.ArrayList;
 
+/**
+ * AppleSkin plugin for Capsaicin so that Capsaicin's food properties are visualized correctly.
+ */
 public class AppleSkinPlugin implements AppleSkinApi {
 	@Override
 	public void registerEvents() {
