@@ -19,6 +19,7 @@ public class CapsaicinTestmod implements ModInitializer {
 			float hungerRatio = 1F + player.getHungerManager().getFoodLevel() / 10F;
 			return (int) (eatingTime * hungerRatio);
 		}, new Identifier("capsaicin-testmod", "test"));
+
 		FoodModifications.PROPERTIES_MODIFIERS.register((foodProperties, context) -> {
 			ItemStack stack = context.stack();
 			if (stack == null) {
@@ -33,6 +34,7 @@ public class CapsaicinTestmod implements ModInitializer {
 			}
 			return foodProperties;
 		}, new Identifier("capsaicin-testmod", "test"));
+
 		FoodEvents.EATEN.on(event -> {
 			FoodContext context = event.context();
 			if (context.stack() != null) {
