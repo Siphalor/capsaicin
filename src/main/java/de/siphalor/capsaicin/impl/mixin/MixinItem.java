@@ -24,8 +24,9 @@ public class MixinItem implements IItem {
 
 	@Inject(method = "getFoodComponent", at = @At("TAIL"), cancellable = true)
 	public void onGetFoodComponent(CallbackInfoReturnable<FoodComponent> cir) {
-		if (FoodHandler.INSTANCE.get().canApply()) {
-			FoodComponent newFoodComponent = FoodHandler.INSTANCE.get().getFoodComponent();
+		FoodHandler foodHandler = FoodHandler.INSTANCE.get();
+		if (foodHandler.canApply()) {
+			FoodComponent newFoodComponent = foodHandler.getFoodComponent();
 			if (newFoodComponent != foodComponent) {
 				cir.setReturnValue(newFoodComponent);
 			}
@@ -35,6 +36,7 @@ public class MixinItem implements IItem {
 	@Inject(method = "use", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/Item;getFoodComponent()Lnet/minecraft/item/FoodComponent;"), locals = LocalCapture.CAPTURE_FAILHARD)
 	public void onUseFood(World world, PlayerEntity player, Hand hand, CallbackInfoReturnable<TypedActionResult<ItemStack>> cir, ItemStack stack) {
 		FoodHandler foodHandler = FoodHandler.INSTANCE.get();
+		foodHandler.reset();
 		foodHandler.withStack(stack);
 		foodHandler.withUser(player);
 	}

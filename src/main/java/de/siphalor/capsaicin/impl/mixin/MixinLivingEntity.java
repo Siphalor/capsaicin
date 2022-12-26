@@ -13,12 +13,16 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class MixinLivingEntity {
 	@Inject(method = "getStackInHand", at = @At("HEAD"))
 	public void onGetStackInHand(CallbackInfoReturnable<ItemStack> callbackInfoReturnable) {
-		FoodHandler.INSTANCE.get().withUser((LivingEntity) (Object) this);
+		FoodHandler foodHandler = FoodHandler.INSTANCE.get();
+		foodHandler.reset();
+		foodHandler.withUser((LivingEntity) (Object) this);
 	}
 
 	@Inject(method = "getItemUseTimeLeft", at = @At("HEAD"))
 	public void onGetItemUseTimeLeft(CallbackInfoReturnable<Integer> callbackInfoReturnable) {
-		FoodHandler.INSTANCE.get().withUser((LivingEntity) (Object) this);
+		FoodHandler foodHandler = FoodHandler.INSTANCE.get();
+		foodHandler.reset();
+		foodHandler.withUser((LivingEntity) (Object) this);
 	}
 
 	@Inject(method = "eatFood", at = @At("RETURN"))
