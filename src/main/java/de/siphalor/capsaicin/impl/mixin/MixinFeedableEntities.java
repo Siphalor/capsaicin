@@ -1,7 +1,6 @@
 package de.siphalor.capsaicin.impl.mixin;
 
-import de.siphalor.capsaicin.impl.food.GenericFoodHandler;
-import net.minecraft.entity.LivingEntity;
+import de.siphalor.capsaicin.impl.food.FoodHandler;
 import net.minecraft.entity.passive.CatEntity;
 import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -19,12 +18,13 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 public class MixinFeedableEntities {
 	@Inject(method = "interactMob", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/Item;getFoodComponent()Lnet/minecraft/item/FoodComponent;"), locals = LocalCapture.CAPTURE_FAILSOFT)
 	public void onFeedMob(PlayerEntity player, Hand hand, CallbackInfoReturnable<ActionResult> cir, ItemStack stack, Item item) {
-		GenericFoodHandler.currentUser = (LivingEntity) (Object) this;
-		GenericFoodHandler.currentStack = stack;
+		FoodHandler foodHandler = FoodHandler.INSTANCE.get();
+		foodHandler.withUser(player);
+		foodHandler.withStack(stack);
 	}
 
 	@Inject(method = "interactMob", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/Item;getFoodComponent()Lnet/minecraft/item/FoodComponent;", shift = At.Shift.AFTER))
 	public void onMobFed(CallbackInfoReturnable<ActionResult> cir) {
-		GenericFoodHandler.reset();
+		FoodHandler.INSTANCE.get().reset();
 	}
 }

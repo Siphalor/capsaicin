@@ -8,6 +8,6 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 @ApiStatus.Internal
-public record FoodContextImpl(@Nullable ItemStack stack, @Nullable BlockState blockState, @Nullable LivingEntity user) implements FoodContext {
+public record FoodContextImpl(@Nullable ItemStack stack, @Nullable BlockState blockState, int originalFoodHunger, float originalFoodSaturationModifier, @Nullable LivingEntity user) implements FoodContext {
 
 }

@@ -1,6 +1,6 @@
 package de.siphalor.capsaicin.impl.mixin;
 
-import de.siphalor.capsaicin.impl.food.GenericFoodHandler;
+import de.siphalor.capsaicin.impl.food.FoodHandler;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -14,7 +14,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class MixinPlayerEntity {
 	@Inject(method = "eatFood", at = @At("HEAD"))
 	public void onEatFood(World world, ItemStack stack, CallbackInfoReturnable<ItemStack> callbackInfoReturnable) {
-		GenericFoodHandler.currentUser = (LivingEntity)(Object) this;
-		GenericFoodHandler.currentStack = stack;
+		FoodHandler foodHandler = FoodHandler.INSTANCE.get();
+		foodHandler.withUser((LivingEntity) (Object) this);
+		foodHandler.withStack(stack);
 	}
 }
