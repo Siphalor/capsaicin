@@ -1,7 +1,7 @@
 package de.siphalor.capsaicin.impl.mixin;
 
+import de.siphalor.capsaicin.impl.food.GenericFoodHandler;
 import de.siphalor.capsaicin.impl.food.eatingtime.EatingTimeHandler;
-import de.siphalor.capsaicin.impl.food.properties.FoodPropertiesHandler;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -24,6 +24,6 @@ public abstract class MixinLivingEntity {
 
 	@Inject(method = "eatFood", at = @At("RETURN"))
 	public void onEatFoodReturn(World world, ItemStack stack, CallbackInfoReturnable<ItemStack> callbackInfoReturnable) {
-		FoodPropertiesHandler.reset();
+		GenericFoodHandler.reset();
 	}
 }

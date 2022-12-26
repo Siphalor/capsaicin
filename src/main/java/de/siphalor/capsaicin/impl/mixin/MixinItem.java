@@ -1,6 +1,6 @@
 package de.siphalor.capsaicin.impl.mixin;
 
-import de.siphalor.capsaicin.impl.food.properties.FoodPropertiesHandler;
+import de.siphalor.capsaicin.impl.food.GenericFoodHandler;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.FoodComponent;
 import net.minecraft.item.Item;
@@ -23,8 +23,8 @@ public class MixinItem {
 
 	@Inject(method = "getFoodComponent", at = @At("TAIL"), cancellable = true)
 	public void onGetFoodComponent(CallbackInfoReturnable<FoodComponent> cir) {
-		if (FoodPropertiesHandler.canApply()) {
-			FoodComponent newFoodComponent = FoodPropertiesHandler.getFoodComponent(foodComponent);
+		if (GenericFoodHandler.canApply()) {
+			FoodComponent newFoodComponent = GenericFoodHandler.getFoodComponent(foodComponent);
 			if (newFoodComponent != foodComponent) {
 				cir.setReturnValue(newFoodComponent);
 			}
@@ -33,12 +33,12 @@ public class MixinItem {
 
 	@Inject(method = "use", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/Item;getFoodComponent()Lnet/minecraft/item/FoodComponent;"), locals = LocalCapture.CAPTURE_FAILHARD)
 	public void onUseFood(World world, PlayerEntity player, Hand hand, CallbackInfoReturnable<TypedActionResult<ItemStack>> cir, ItemStack stack) {
-		FoodPropertiesHandler.currentUser = player;
-		FoodPropertiesHandler.currentStack = stack;
+		GenericFoodHandler.currentUser = player;
+		GenericFoodHandler.currentStack = stack;
 	}
 
 	@Inject(method = "use", at = @At("RETURN"))
 	public void onUseReturn(CallbackInfoReturnable<TypedActionResult<ItemStack>> cir) {
-		FoodPropertiesHandler.reset();
+		GenericFoodHandler.reset();
 	}
 }

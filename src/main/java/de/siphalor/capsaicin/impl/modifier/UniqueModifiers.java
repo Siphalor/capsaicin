@@ -30,9 +30,13 @@ public class UniqueModifiers<Value, Context> implements Modifiers<Value, Context
 	public Value apply(Value value, Context context) {
 		for (Entry<Value, Context> entry : modifiers) {
 			try {
-				value = entry.getModifier().apply(value, context);
+				value = entry.modifier().apply(value, context);
 			} catch (Exception e) {
-				throw new RuntimeException("Error while applying modifier " + entry.getId(), e);
+				if (entry.modifier().ignoreErrors()) {
+					e.printStackTrace();
+				} else {
+					throw new RuntimeException("Error while applying modifier " + entry.id(), e);
+				}
 			}
 		}
 		return value;
@@ -60,11 +64,11 @@ public class UniqueModifiers<Value, Context> implements Modifiers<Value, Context
 			return cmp;
 		}
 
-		public Modifier<Value, Context> getModifier() {
+		public Modifier<Value, Context> modifier() {
 			return modifier;
 		}
 
-		public Identifier getId() {
+		public Identifier id() {
 			return id;
 		}
 

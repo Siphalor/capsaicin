@@ -8,10 +8,10 @@ import net.minecraft.entity.player.PlayerEntity;
  * @param <Value> The class of the value
  */
 @FunctionalInterface
-public interface PlayerFoodModifier<Value> extends Modifier<Value, FoodModificationContext> {
+public interface PlayerFoodModifier<Value> extends Modifier<Value, FoodContext> {
 	@Override
-	default Value apply(Value value, FoodModificationContext context) {
-		if (context.getUser() instanceof PlayerEntity player) {
+	default Value apply(Value value, FoodContext context) {
+		if (context.user() instanceof PlayerEntity player) {
 			return apply(value, context, player);
 		}
 		return value;
@@ -24,5 +24,5 @@ public interface PlayerFoodModifier<Value> extends Modifier<Value, FoodModificat
 	 * @param player The player that is using the stack
 	 * @return An updated or new value based on the input, context and player
 	 */
-	Value apply(Value value, FoodModificationContext context, PlayerEntity player);
+	Value apply(Value value, FoodContext context, PlayerEntity player);
 }

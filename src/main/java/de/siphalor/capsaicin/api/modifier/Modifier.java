@@ -14,4 +14,8 @@ public interface Modifier<Value, Context> {
 	 * @return An updated or new value based on the input and context
 	 */
 	Value apply(Value value, Context context);
+
+	default boolean ignoreErrors() {
+		return false;
+	}
 }
