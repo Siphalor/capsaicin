@@ -1,6 +1,7 @@
 package de.siphalor.capsaicin.impl.food;
 
 import com.mojang.datafixers.util.Pair;
+import de.siphalor.capsaicin.api.food.CamoFoodItem;
 import de.siphalor.capsaicin.api.food.FoodContext;
 import de.siphalor.capsaicin.api.food.FoodModifications;
 import de.siphalor.capsaicin.api.food.FoodProperties;
@@ -13,6 +14,7 @@ import net.minecraft.item.FoodComponent;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 
@@ -42,6 +44,13 @@ public class FoodHandler {
 	public void withStack(ItemStack stack) {
 		this.stack = stack;
 		Item item = stack.getItem();
+		if (item instanceof CamoFoodItem camoFoodItem) {
+			this.stack = camoFoodItem.getCamoFoodStack(stack, createContext());
+			if (this.stack == null) {
+				return;
+			}
+			item = this.stack.getItem();
+		}
 		if (item instanceof IItem iItem) {
 			stackFoodComponent = iItem.capsaicin$getVanillaFoodComponent();
 			if (stackFoodComponent != null) {
@@ -53,7 +62,7 @@ public class FoodHandler {
 		if (item != null) {
 			// Must not call stack.getMaxUseTime() here!
 			// This would cause a stack overflow
-			eatingTime = item.getMaxUseTime(stack);
+			eatingTime = item.getMaxUseTime(this.stack);
 		} else {
 			eatingTime = 0;
 		}
@@ -82,13 +91,14 @@ public class FoodHandler {
 	}
 
 	public FoodContext createContext() {
-		if (canApply()) {
-			return new FoodContextImpl(stack, blockState, foodProperties.getHunger(), foodProperties.getSaturationModifier(), user);
-		}
-		return null;
+		return new FoodContextImpl(stack, blockState, foodProperties.getHunger(), foodProperties.getSaturationModifier(), user);
 	}
 
-	public FoodComponent getFoodComponent() {
+	public @Nullable FoodComponent getFoodComponent() {
+		if (!canApply()) {
+			return null;
+		}
+
 		FoodProperties propertiesIn;
 		if (stack != null && stackFoodComponent != null) {
 			propertiesIn = FoodProperties.from(stackFoodComponent);
@@ -124,11 +134,14 @@ public class FoodHandler {
 		return builder.build();
 	}
 
-	public FoodProperties getFoodProperties(FoodProperties foodProperties) {
+	protected FoodProperties getFoodProperties(FoodProperties foodProperties) {
 		return FoodModifications.PROPERTIES_MODIFIERS.apply(foodProperties, createContext());
 	}
 
 	public int getEatingTime() {
+		if (!canApply()) {
+			return 0;
+		}
 		return FoodModifications.EATING_TIME_MODIFIERS.apply(eatingTime, createContext());
 	}
 }

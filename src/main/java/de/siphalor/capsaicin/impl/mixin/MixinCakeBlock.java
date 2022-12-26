@@ -39,17 +39,19 @@ public class MixinCakeBlock {
 	@Redirect(method = "tryEat", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/HungerManager;add(IF)V"))
 	private static void eat(HungerManager hungerManager, int hunger, float saturationModifier) {
 		FoodHandler foodHandler = FoodHandler.INSTANCE.get();
-		FoodComponent foodProperties = foodHandler.getFoodComponent();
+		FoodComponent foodComponent = foodHandler.getFoodComponent();
 
-		LivingEntity user = foodHandler.getUser();
-		Random random = user.getRandom();
-		hungerManager.add(foodProperties.getHunger(), foodProperties.getSaturationModifier());
-		for (Pair<StatusEffectInstance, Float> effect : foodProperties.getStatusEffects()) {
-			if (random.nextFloat() < effect.getSecond()) {
-				user.addStatusEffect(effect.getFirst());
+		if (foodComponent != null) {
+			LivingEntity user = foodHandler.getUser();
+			Random random = user.getRandom();
+			hungerManager.add(foodComponent.getHunger(), foodComponent.getSaturationModifier());
+			for (Pair<StatusEffectInstance, Float> effect : foodComponent.getStatusEffects()) {
+				if (random.nextFloat() < effect.getSecond()) {
+					user.addStatusEffect(effect.getFirst());
+				}
 			}
+			FoodEvents.EATEN.emit(new EatenEvent(foodHandler.createContext()));
 		}
-		FoodEvents.EATEN.emit(new EatenEvent(foodHandler.createContext()));
 
 		foodHandler.reset();
 	}
