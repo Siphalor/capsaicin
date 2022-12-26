@@ -19,6 +19,7 @@ public class MixinFeedableEntities {
 	@Inject(method = "interactMob", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/Item;getFoodComponent()Lnet/minecraft/item/FoodComponent;"), locals = LocalCapture.CAPTURE_FAILSOFT)
 	public void onFeedMob(PlayerEntity player, Hand hand, CallbackInfoReturnable<ActionResult> cir, ItemStack stack, Item item) {
 		FoodHandler foodHandler = FoodHandler.INSTANCE.get();
+		foodHandler.reset();
 		foodHandler.withUser(player);
 		foodHandler.withStack(stack);
 	}

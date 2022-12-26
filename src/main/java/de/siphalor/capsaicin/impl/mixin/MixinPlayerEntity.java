@@ -15,6 +15,7 @@ public class MixinPlayerEntity {
 	@Inject(method = "eatFood", at = @At("HEAD"))
 	public void onEatFood(World world, ItemStack stack, CallbackInfoReturnable<ItemStack> callbackInfoReturnable) {
 		FoodHandler foodHandler = FoodHandler.INSTANCE.get();
+		foodHandler.reset();
 		foodHandler.withUser((LivingEntity) (Object) this);
 		foodHandler.withStack(stack);
 	}

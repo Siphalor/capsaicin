@@ -31,6 +31,7 @@ public class MixinCakeBlock {
 	@Inject(method = "tryEat", at = @At("HEAD"))
 	private static void onEat(WorldAccess world, BlockPos pos, BlockState state, PlayerEntity player, CallbackInfoReturnable<ActionResult> cir) {
 		FoodHandler foodHandler = FoodHandler.INSTANCE.get();
+		foodHandler.reset();
 		foodHandler.withUser(player);
 		foodHandler.withBlockState(state, new FoodPropertiesImpl(2, 0.1F, false, new ArrayList<>()));
 	}
