@@ -8,22 +8,14 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @ApiStatus.Internal
-public class FoodModificationContextImpl implements FoodModificationContext {
-	private final ItemStack stack;
-	private final LivingEntity user;
-
-	public FoodModificationContextImpl(ItemStack stack, LivingEntity user) {
-		this.stack = stack;
-		this.user = user;
-	}
-
+public record FoodModificationContextImpl(ItemStack stack, LivingEntity user) implements FoodModificationContext {
 	@Override
 	public @NotNull ItemStack getStack() {
-		return stack;
+		return stack();
 	}
 
 	@Override
 	public @Nullable LivingEntity getUser() {
-		return user;
+		return user();
 	}
 }
