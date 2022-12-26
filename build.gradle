@@ -48,7 +48,7 @@ dependencies {
 
 	// AppleSkin
 	modCompileOnly "squeek.appleskin:appleskin-fabric:mc1.18.2-2.4.0:api"
-	modLocalRuntime "squeek.appleskin:appleskin-fabric:mc1.18.2-2.4.0"
+	modLocalRuntime(modCompileOnly("squeek.appleskin:appleskin-fabric:mc1.18.2-2.4.0"))
 
 	// Testmod stuff
 	testmodImplementation sourceSets.main.output

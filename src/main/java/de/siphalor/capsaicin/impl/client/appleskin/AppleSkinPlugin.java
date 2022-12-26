@@ -18,7 +18,8 @@ public class AppleSkinPlugin implements AppleSkinApi {
 	public void registerEvents() {
 		FoodValuesEvent.EVENT.register(event -> {
 			FoodProperties foodProperties = new FoodPropertiesImpl(event.modifiedFoodValues.hunger, event.modifiedFoodValues.saturationModifier, false, new ArrayList<>());
-			FoodProperties newFoodProperties = FoodModifications.PROPERTIES_MODIFIERS.apply(foodProperties, new FoodContextImpl(event.itemStack, null, event.player));
+			FoodValues defaultFoodValues = event.defaultFoodValues;
+			FoodProperties newFoodProperties = FoodModifications.PROPERTIES_MODIFIERS.apply(foodProperties, new FoodContextImpl(event.itemStack, null, defaultFoodValues.hunger, defaultFoodValues.saturationModifier, event.player));
 			if (foodProperties != newFoodProperties || foodProperties.isChanged()) {
 				event.modifiedFoodValues = new FoodValues(newFoodProperties.getHunger(), newFoodProperties.getSaturationModifier());
 			}
