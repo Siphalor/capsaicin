@@ -1,6 +1,7 @@
 plugins {
 	id 'fabric-loom' version '1.0-SNAPSHOT'
 	id 'maven-publish'
+	id 'com.github.breadmoirai.github-release' version '2.2.12'
 }
 
 archivesBaseName = project.archives_base_name
@@ -110,5 +111,21 @@ publishing {
 		// Notice: This block does NOT have the same function as the block in the top level.
 		// The repositories here will be used for publishing your artifact, not for
 		// retrieving dependencies.
+	}
+}
+
+static def getProjectChangelog() {
+	return 'git log -1 --format=format:##%x20%s%n%n%b%nRelease%x20by%x20%an --grep Version'.execute().text.trim()
+}
+
+if (project.hasProperty("githubToken")) {
+	githubRelease {
+		token project.githubToken
+		targetCommitish = project.minecraft_major_version
+		releaseName = "Version $project.mod_version for $project.mod_mc_version_spec"
+		body = getProjectChangelog()
+		releaseAssets remapJar.getArchiveFile()
+		prerelease = project.release_type != "release"
+		overwrite = true
 	}
 }
