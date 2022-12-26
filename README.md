@@ -29,9 +29,9 @@ repositories {
 
 dependencies {
 	// Use the latest version from the badge at the top of this README
-	modImplementation("de.siphalor:capsaicin-1.18:1.1.0+mc1.18.2")
+	modImplementation("de.siphalor:capsaicin-1.18:1.2.0+mc1.18.2")
 	// Alternatively, you may embed (jar-in-jar) this library with the following dependency configuration
-	include(modApi("de.siphalor:capsaicin-1.18:1.1.0+mc1.18.2"))
+	include(modApi("de.siphalor:capsaicin-1.18:1.2.0+mc1.18.2"))
 }
 
 ```
