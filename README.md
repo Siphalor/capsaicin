@@ -7,7 +7,7 @@
 
 ![supported Minecraft versions: 1.18 | 1.19](https://img.shields.io/badge/support%20for%20MC-1.18%20%7C%201.19-%2356AD56?style=for-the-badge)
 
-[![latest maven release](https://img.shields.io/maven-metadata/v?color=0f9fbc&metadataUrl=https%3A%2F%2Fmaven.siphalor.de%2Fde%2Fsiphalor%2Fcapsaicin-1.18%2Fmaven-metadata.xml&style=flat-square)](https://maven.siphalor.de/de/siphalor/capsaicin-1.18/)
+[![latest maven release](https://img.shields.io/maven-metadata/v?color=0f9fbc&metadataUrl=https%3A%2F%2Fmaven.siphalor.de%2Fde%2Fsiphalor%2Fcapsaicin-1.19%2Fmaven-metadata.xml&style=flat-square)](https://maven.siphalor.de/de/siphalor/capsaicin-1.19/)
 
 This library mod provides hooks to dynamically modify properties of food items at runtime.
 
@@ -29,9 +29,9 @@ repositories {
 
 dependencies {
 	// Use the latest version from the badge at the top of this README
-	modImplementation("de.siphalor:capsaicin-1.18:1.1.0")
+	modImplementation("de.siphalor:capsaicin-1.19:1.1.0")
 	// Alternatively, you may embed (jar-in-jar) this library with the following dependency configuration
-	include(modApi("de.siphalor:capsaicin-1.18:1.1.0"))
+	include(modApi("de.siphalor:capsaicin-1.19:1.1.0"))
 }
 
 ```
