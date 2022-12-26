@@ -1,8 +1,8 @@
 package de.siphalor.capsaicin.impl.client.appleskin;
 
-import de.siphalor.capsaicin.api.food.FoodModificationRegistry;
+import de.siphalor.capsaicin.api.food.FoodModifications;
 import de.siphalor.capsaicin.api.food.FoodProperties;
-import de.siphalor.capsaicin.impl.food.FoodModificationContextImpl;
+import de.siphalor.capsaicin.impl.food.FoodContextImpl;
 import de.siphalor.capsaicin.impl.food.properties.FoodPropertiesImpl;
 import squeek.appleskin.api.AppleSkinApi;
 import squeek.appleskin.api.event.FoodValuesEvent;
@@ -18,7 +18,7 @@ public class AppleSkinPlugin implements AppleSkinApi {
 	public void registerEvents() {
 		FoodValuesEvent.EVENT.register(event -> {
 			FoodProperties foodProperties = new FoodPropertiesImpl(event.modifiedFoodValues.hunger, event.modifiedFoodValues.saturationModifier, false, new ArrayList<>());
-			FoodProperties newFoodProperties = FoodModificationRegistry.PROPERTIES_MODIFIERS.apply(foodProperties, new FoodModificationContextImpl(event.itemStack, event.player));
+			FoodProperties newFoodProperties = FoodModifications.PROPERTIES_MODIFIERS.apply(foodProperties, new FoodContextImpl(event.itemStack, null, event.player));
 			if (foodProperties != newFoodProperties || foodProperties.isChanged()) {
 				event.modifiedFoodValues = new FoodValues(newFoodProperties.getHunger(), newFoodProperties.getSaturationModifier());
 			}

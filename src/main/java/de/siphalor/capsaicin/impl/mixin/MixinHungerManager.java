@@ -1,6 +1,8 @@
 package de.siphalor.capsaicin.impl.mixin;
 
-import de.siphalor.capsaicin.impl.food.properties.FoodPropertiesHandler;
+import de.siphalor.capsaicin.api.food.FoodEvents;
+import de.siphalor.capsaicin.impl.food.GenericFoodHandler;
+import de.siphalor.capsaicin.impl.food.event.EatenEvent;
 import net.minecraft.entity.player.HungerManager;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -15,6 +17,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class MixinHungerManager {
 	@Inject(method = "eat", at = @At("HEAD"))
 	public void onEat(Item item, ItemStack stack, CallbackInfo ci) {
-		FoodPropertiesHandler.currentStack = stack;
+		GenericFoodHandler.currentStack = stack;
+	}
+
+	@Inject(method = "eat", at = @At(value = "INVOKE", shift = At.Shift.AFTER, target = "Lnet/minecraft/entity/player/HungerManager;add(IF)V"))
+	public void onEaten(Item item, ItemStack stack, CallbackInfo ci) {
+		FoodEvents.EATEN.emit(new EatenEvent(GenericFoodHandler.createContext()));
 	}
 }
