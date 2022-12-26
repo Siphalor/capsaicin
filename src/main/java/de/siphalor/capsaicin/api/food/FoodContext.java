@@ -26,4 +26,16 @@ public interface FoodContext {
 	 * @return the entity or <code>null</code> if no entity is known in the current context
 	 */
 	@Nullable LivingEntity user();
+
+	/**
+	 * The amount of hunger that is restored <b>before any modifications</b>.
+	 * @return the amount of hunger
+	 */
+	int originalFoodHunger();
+
+	/**
+	 * The saturation modifier <b>before any modifications</b>.
+	 * @return the saturation modifier
+	 */
+	float originalFoodSaturationModifier();
 }

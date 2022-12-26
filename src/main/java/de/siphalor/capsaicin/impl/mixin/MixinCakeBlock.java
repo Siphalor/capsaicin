@@ -2,8 +2,7 @@ package de.siphalor.capsaicin.impl.mixin;
 
 import com.mojang.datafixers.util.Pair;
 import de.siphalor.capsaicin.api.food.FoodEvents;
-import de.siphalor.capsaicin.api.food.FoodProperties;
-import de.siphalor.capsaicin.impl.food.GenericFoodHandler;
+import de.siphalor.capsaicin.impl.food.FoodHandler;
 import de.siphalor.capsaicin.impl.food.event.EatenEvent;
 import de.siphalor.capsaicin.impl.food.properties.FoodPropertiesImpl;
 import net.minecraft.block.BlockState;
@@ -12,6 +11,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.HungerManager;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.FoodComponent;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
@@ -30,16 +30,17 @@ import java.util.ArrayList;
 public class MixinCakeBlock {
 	@Inject(method = "tryEat", at = @At("HEAD"))
 	private static void onEat(WorldAccess world, BlockPos pos, BlockState state, PlayerEntity player, CallbackInfoReturnable<ActionResult> cir) {
-		GenericFoodHandler.currentUser = player;
-		GenericFoodHandler.currentBlockState = state;
-		GenericFoodHandler.currentStack = null;
+		FoodHandler foodHandler = FoodHandler.INSTANCE.get();
+		foodHandler.withUser(player);
+		foodHandler.withBlockState(state, new FoodPropertiesImpl(2, 0.1F, false, new ArrayList<>()));
 	}
 
 	@Redirect(method = "tryEat", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/HungerManager;add(IF)V"))
 	private static void eat(HungerManager hungerManager, int hunger, float saturationModifier) {
-		FoodProperties foodProperties = GenericFoodHandler.getFoodProperties(new FoodPropertiesImpl(hunger, saturationModifier, false, new ArrayList<>()));
+		FoodHandler foodHandler = FoodHandler.INSTANCE.get();
+		FoodComponent foodProperties = foodHandler.getFoodComponent();
 
-		LivingEntity user = GenericFoodHandler.currentUser;
+		LivingEntity user = foodHandler.getUser();
 		Random random = user.getRandom();
 		hungerManager.add(foodProperties.getHunger(), foodProperties.getSaturationModifier());
 		for (Pair<StatusEffectInstance, Float> effect : foodProperties.getStatusEffects()) {
@@ -47,8 +48,8 @@ public class MixinCakeBlock {
 				user.addStatusEffect(effect.getFirst());
 			}
 		}
-		FoodEvents.EATEN.emit(new EatenEvent(GenericFoodHandler.createContext()));
+		FoodEvents.EATEN.emit(new EatenEvent(foodHandler.createContext()));
 
-		GenericFoodHandler.reset();
+		foodHandler.reset();
 	}
 }
