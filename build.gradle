@@ -47,11 +47,11 @@ dependencies {
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
 	// AppleSkin
-	modCompileOnly "squeek.appleskin:appleskin-fabric:mc1.19-2.4.1:api"
-	modLocalRuntime("squeek.appleskin:appleskin-fabric:mc1.19-2.4.1") {
+	modCompileOnly "squeek.appleskin:appleskin-fabric:mc1.19.3-2.4.2:api"
+	modLocalRuntime("squeek.appleskin:appleskin-fabric:mc1.19.3-2.4.2") {
 		exclude module: "modmenu"
 	}
-	modLocalRuntime "net.fabricmc.fabric-api:fabric-api:0.70.0+1.19.2"
+	modLocalRuntime "net.fabricmc.fabric-api:fabric-api:0.70.0+1.19.3"
 
 	// Testmod stuff
 	testmodImplementation sourceSets.main.output
