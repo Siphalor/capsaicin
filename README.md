@@ -12,7 +12,6 @@
 This library mod provides hooks to dynamically modify properties of food items at runtime.
 
 **&nbsp;
- ·
 [Discord](https://discord.gg/6gaXmbj)
 &nbsp;**
 
