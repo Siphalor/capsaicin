@@ -1,10 +1,7 @@
 package de.siphalor.capsaicin.impl.food;
 
 import com.mojang.datafixers.util.Pair;
-import de.siphalor.capsaicin.api.food.CamoFoodItem;
-import de.siphalor.capsaicin.api.food.FoodContext;
-import de.siphalor.capsaicin.api.food.FoodModifications;
-import de.siphalor.capsaicin.api.food.FoodProperties;
+import de.siphalor.capsaicin.api.food.*;
 import de.siphalor.capsaicin.impl.food.properties.FoodPropertiesImpl;
 import de.siphalor.capsaicin.impl.util.IItem;
 import net.minecraft.block.BlockState;
@@ -33,6 +30,10 @@ public class FoodHandler {
 		return stack;
 	}
 
+	public FoodComponent getStackOriginalFoodComponent() {
+		return stackFoodComponent;
+	}
+
 	public BlockState getBlockState() {
 		return blockState;
 	}
@@ -45,7 +46,12 @@ public class FoodHandler {
 		this.stack = stack;
 		Item item = stack.getItem();
 		if (item instanceof CamoFoodItem camoFoodItem) {
-			this.stack = camoFoodItem.getCamoFoodStack(stack, createContext());
+			this.stack = camoFoodItem.getCamoFoodStack(stack, new CamoFoodContext() {
+				@Override
+				public LivingEntity user() {
+					return user;
+				}
+			});
 			if (this.stack == null) {
 				return;
 			}
@@ -91,6 +97,9 @@ public class FoodHandler {
 	}
 
 	public FoodContext createContext() {
+		if (foodProperties == null) {
+			return new FoodContextImpl(stack, blockState, 0, 0, user);
+		}
 		return new FoodContextImpl(stack, blockState, foodProperties.getHunger(), foodProperties.getSaturationModifier(), user);
 	}
 

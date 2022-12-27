@@ -17,6 +17,7 @@ import java.util.Set;
 @ApiStatus.Internal
 public class CapsaicinMixinConfig implements IMixinConfigPlugin {
 	private final boolean appleskinLoaded = FabricLoader.getInstance().isModLoaded("appleskin");
+	private final boolean polymerLoaded = FabricLoader.getInstance().isModLoaded("polymer");
 	private String ItemStack$getMaxUseTime$remapped;
 	private String EatingTimeHandler$getEatingTime$desc;
 
@@ -37,6 +38,8 @@ public class CapsaicinMixinConfig implements IMixinConfigPlugin {
 	public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
 		if (mixinClassName.startsWith("de.siphalor.capsaicin.impl.mixin.client.appleskin")) {
 			return appleskinLoaded;
+		} else if (mixinClassName.startsWith("de.siphalor.capsaicin.impl.mixin.client.polymer")) {
+			return polymerLoaded;
 		}
 		return true;
 	}
