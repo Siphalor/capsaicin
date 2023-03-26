@@ -14,7 +14,8 @@
 		"MixinPlayerEntity"
 	],
 	"client": [
-		"client.appleskin.MixinFoodHelper"
+		"client.appleskin.MixinFoodHelper",
+		"client.polymer.MixinPolymerAppleskinPlugin"
 	],
 	"injectors": {
 		"defaultRequire": 1

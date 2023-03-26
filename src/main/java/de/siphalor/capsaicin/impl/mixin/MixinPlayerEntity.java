@@ -16,7 +16,6 @@ public class MixinPlayerEntity {
 	public void onEatFood(World world, ItemStack stack, CallbackInfoReturnable<ItemStack> callbackInfoReturnable) {
 		FoodHandler foodHandler = FoodHandler.INSTANCE.get();
 		foodHandler.reset();
-		foodHandler.withUser((LivingEntity) (Object) this);
-		foodHandler.withStack(stack);
+		foodHandler.withUser((LivingEntity) (Object) this).withStack(stack);
 	}
 }
