@@ -20,7 +20,7 @@ import squeek.appleskin.api.food.FoodValues;
 
 @Mixin(AppleSkinCompatibility.class)
 public class MixinPolymerAppleskinPlugin {
-	@Inject(method = "lambda$registerEvents$0", at = @At(
+	@Inject(method = "lambda$registerEvents$0", remap = false, at = @At(
 			value = "INVOKE",
 			target = "Lsqueek/appleskin/api/food/FoodValues;<init>(IF)V"
 	), cancellable = true, locals = LocalCapture.CAPTURE_FAILSOFT)
@@ -33,13 +33,12 @@ public class MixinPolymerAppleskinPlugin {
 			if (realNbt != null) {
 				actualStack.setNbt(realNbt);
 			}
-			foodHandler.withUser(MinecraftClient.getInstance().player);
-			foodHandler.withStack(actualStack);
+			foodHandler.withUser(MinecraftClient.getInstance().player).withStack(actualStack);
 			FoodComponent originalFoodComponent = foodHandler.getStackOriginalFoodComponent();
 			if (originalFoodComponent != null) {
 				event.defaultFoodValues = new FoodValues(originalFoodComponent.getHunger(), originalFoodComponent.getSaturationModifier());
 			}
-			FoodComponent foodComponent = foodHandler.getFoodComponent();
+			FoodComponent foodComponent = foodHandler.getModifiedFoodComponent();
 			if (foodComponent != null) {
 				event.modifiedFoodValues = new FoodValues(foodComponent.getHunger(), foodComponent.getSaturationModifier());
 			}

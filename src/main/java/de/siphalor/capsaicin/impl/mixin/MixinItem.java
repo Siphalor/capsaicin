@@ -25,8 +25,8 @@ public class MixinItem implements IItem {
 	@Inject(method = "getFoodComponent", at = @At("TAIL"), cancellable = true)
 	public void onGetFoodComponent(CallbackInfoReturnable<FoodComponent> cir) {
 		FoodHandler foodHandler = FoodHandler.INSTANCE.get();
-		if (foodHandler.canApply()) {
-			FoodComponent newFoodComponent = foodHandler.getFoodComponent();
+		if (foodHandler.isReady()) {
+			FoodComponent newFoodComponent = foodHandler.getModifiedFoodComponent();
 			if (newFoodComponent != foodComponent) {
 				cir.setReturnValue(newFoodComponent);
 			}
@@ -37,8 +37,7 @@ public class MixinItem implements IItem {
 	public void onUseFood(World world, PlayerEntity player, Hand hand, CallbackInfoReturnable<TypedActionResult<ItemStack>> cir, ItemStack stack) {
 		FoodHandler foodHandler = FoodHandler.INSTANCE.get();
 		foodHandler.reset();
-		foodHandler.withStack(stack);
-		foodHandler.withUser(player);
+		foodHandler.withUser(player).withStack(stack);
 	}
 
 	@Inject(method = "use", at = @At("RETURN"))

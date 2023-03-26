@@ -9,9 +9,9 @@ public class EatingTimeHandler {
 	@SuppressWarnings("unused") // Used via ASM in the mixin config
 	public static int getEatingTime(ItemStack stack, int eatingTime) {
 		FoodHandler foodHandler = FoodHandler.INSTANCE.get();
-		if (foodHandler.canApply()) {
+		if (foodHandler.isReady()) {
 			foodHandler.withStack(stack);
-			return foodHandler.getEatingTime();
+			return foodHandler.getModifiedEatingTime();
 		}
 		return eatingTime;
 	}

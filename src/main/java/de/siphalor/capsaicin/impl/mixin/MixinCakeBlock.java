@@ -39,7 +39,7 @@ public class MixinCakeBlock {
 	@Redirect(method = "tryEat", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/HungerManager;add(IF)V"))
 	private static void eat(HungerManager hungerManager, int hunger, float saturationModifier) {
 		FoodHandler foodHandler = FoodHandler.INSTANCE.get();
-		FoodComponent foodComponent = foodHandler.getFoodComponent();
+		FoodComponent foodComponent = foodHandler.getModifiedFoodComponent();
 
 		if (foodComponent != null) {
 			LivingEntity user = foodHandler.getUser();

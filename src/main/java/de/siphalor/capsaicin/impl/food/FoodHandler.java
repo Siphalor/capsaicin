@@ -11,12 +11,13 @@ import net.minecraft.item.FoodComponent;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 
 @ApiStatus.Internal
-public class FoodHandler {
+public class FoodHandler implements DynamicFoodPropertiesAccess {
 	public static final ThreadLocal<FoodHandler> INSTANCE = ThreadLocal.withInitial(FoodHandler::new);
 
 	private FoodProperties foodProperties;
@@ -25,6 +26,17 @@ public class FoodHandler {
 	private FoodComponent stackFoodComponent;
 	private BlockState blockState;
 	private LivingEntity user;
+
+	public static FoodHandler createInheriting() {
+		FoodHandler parent = INSTANCE.get();
+		FoodHandler foodHandler = new FoodHandler();
+		foodHandler.foodProperties = parent.foodProperties;
+		foodHandler.stack = parent.stack;
+		foodHandler.stackFoodComponent = parent.stackFoodComponent;
+		foodHandler.blockState = parent.blockState;
+		foodHandler.user = parent.user;
+		return foodHandler;
+	}
 
 	public ItemStack getStack() {
 		return stack;
@@ -42,7 +54,9 @@ public class FoodHandler {
 		return user;
 	}
 
-	public void withStack(ItemStack stack) {
+	public @NotNull FoodHandler withStack(@NotNull ItemStack stack) {
+		this.blockState = null;
+
 		this.stack = stack;
 		Item item = stack.getItem();
 		if (item instanceof CamoFoodItem camoFoodItem) {
@@ -53,7 +67,7 @@ public class FoodHandler {
 				}
 			});
 			if (this.stack == null) {
-				return;
+				return this;
 			}
 			item = this.stack.getItem();
 		}
@@ -72,16 +86,22 @@ public class FoodHandler {
 		} else {
 			eatingTime = 0;
 		}
+		return this;
 	}
 
-	public void withBlockState(BlockState blockState, FoodProperties foodProperties) {
+	public @NotNull FoodHandler withBlockState(@NotNull BlockState blockState, @NotNull FoodProperties foodProperties) {
+		this.stack = null;
+		this.stackFoodComponent = null;
+
 		this.blockState = blockState;
 		this.foodProperties = foodProperties;
 		this.eatingTime = 0;
+		return this;
 	}
 
-	public void withUser(LivingEntity user) {
+	public FoodHandler withUser(LivingEntity user) {
 		this.user = user;
+		return this;
 	}
 
 	public void reset() {
@@ -92,7 +112,7 @@ public class FoodHandler {
 		user = null;
 	}
 
-	public boolean canApply() {
+	public boolean isReady() {
 		return stack != null || blockState != null;
 	}
 
@@ -103,14 +123,15 @@ public class FoodHandler {
 		return new FoodContextImpl(stack, blockState, foodProperties.getHunger(), foodProperties.getSaturationModifier(), user);
 	}
 
-	public @Nullable FoodComponent getFoodComponent() {
-		if (!canApply()) {
+	@Override
+	public @Nullable FoodComponent getModifiedFoodComponent() {
+		if (!isReady()) {
 			return null;
 		}
 
 		FoodProperties propertiesIn;
-		if (stack != null && stackFoodComponent != null) {
-			propertiesIn = FoodProperties.from(stackFoodComponent);
+		if (foodProperties == null) {
+			propertiesIn = new FoodPropertiesImpl(0, 0F, false, new ArrayList<>());
 		} else {
 			propertiesIn = new FoodPropertiesImpl(foodProperties.getHunger(), foodProperties.getSaturationModifier(), false, new ArrayList<>());
 		}
@@ -147,8 +168,9 @@ public class FoodHandler {
 		return FoodModifications.PROPERTIES_MODIFIERS.apply(foodProperties, createContext());
 	}
 
-	public int getEatingTime() {
-		if (!canApply()) {
+	@Override
+	public int getModifiedEatingTime() {
+		if (!isReady()) {
 			return 0;
 		}
 		return FoodModifications.EATING_TIME_MODIFIERS.apply(eatingTime, createContext());
