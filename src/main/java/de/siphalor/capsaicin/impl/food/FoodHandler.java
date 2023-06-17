@@ -120,7 +120,7 @@ public class FoodHandler implements DynamicFoodPropertiesAccess {
 		if (foodProperties == null) {
 			propertiesIn = new FoodPropertiesImpl(0, 0F, false, new ArrayList<>());
 		} else {
-			propertiesIn = new FoodPropertiesImpl(foodProperties.getHunger(), foodProperties.getSaturationModifier(), false, new ArrayList<>());
+			propertiesIn = new FoodPropertiesImpl(foodProperties.getHunger(), foodProperties.getSaturationModifier(), false, foodProperties.getStatusEffects());
 		}
 		@NotNull FoodProperties propertiesOut = getFoodProperties(propertiesIn);
 		if (propertiesOut == propertiesIn && !propertiesIn.isChanged()) {
