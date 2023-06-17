@@ -62,7 +62,7 @@ dependencies {
 	modLocalRuntime "net.fabricmc.fabric-api:fabric-api:$project.fabric_api_version"
 
 	// Polymer
-	modCompileOnly "eu.pb4:polymer:$project.polymer_version"
+	modCompileOnly "eu.pb4:polymer-core:$project.polymer_version"
 
 	// Testmod stuff
 	testmodImplementation sourceSets.main.output

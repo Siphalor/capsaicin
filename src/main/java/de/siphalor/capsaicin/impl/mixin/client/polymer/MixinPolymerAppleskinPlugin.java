@@ -1,9 +1,9 @@
 package de.siphalor.capsaicin.impl.mixin.client.polymer;
 
 import de.siphalor.capsaicin.impl.food.FoodHandler;
-import eu.pb4.polymer.api.client.registry.ClientPolymerItem;
-import eu.pb4.polymer.api.item.PolymerItemUtils;
-import eu.pb4.polymer.impl.client.compat.AppleSkinCompatibility;
+import eu.pb4.polymer.core.api.client.ClientPolymerItem;
+import eu.pb4.polymer.core.api.item.PolymerItemUtils;
+import eu.pb4.polymer.core.impl.client.compat.AppleSkinCompatibility;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.item.FoodComponent;
 import net.minecraft.item.Item;

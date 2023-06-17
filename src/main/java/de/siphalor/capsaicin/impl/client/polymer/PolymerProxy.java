@@ -1,7 +1,7 @@
 package de.siphalor.capsaicin.impl.client.polymer;
 
-import eu.pb4.polymer.api.item.PolymerItemUtils;
-import eu.pb4.polymer.impl.client.InternalClientRegistry;
+import eu.pb4.polymer.core.api.item.PolymerItemUtils;
+import eu.pb4.polymer.core.impl.client.InternalClientRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 

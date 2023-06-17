@@ -30,6 +30,9 @@
 			"<1.19.3"
 		]
 	},
+	"breaks": {
+		"polymer": "<0.3.13"
+	},
 	"custom": {
 		"modmenu:api": true,
 		"modmenu": {
