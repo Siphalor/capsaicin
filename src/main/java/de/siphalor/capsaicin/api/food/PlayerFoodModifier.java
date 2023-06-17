@@ -2,6 +2,7 @@ package de.siphalor.capsaicin.api.food;
 
 import de.siphalor.capsaicin.api.modifier.Modifier;
 import net.minecraft.entity.player.PlayerEntity;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * A food modifier that is only applied, if the using entity is a player.
@@ -10,7 +11,7 @@ import net.minecraft.entity.player.PlayerEntity;
 @FunctionalInterface
 public interface PlayerFoodModifier<Value> extends Modifier<Value, FoodContext> {
 	@Override
-	default Value apply(Value value, FoodContext context) {
+	default @NotNull Value apply(@NotNull Value value, @NotNull FoodContext context) {
 		if (context.user() instanceof PlayerEntity player) {
 			return apply(value, context, player);
 		}
@@ -24,5 +25,5 @@ public interface PlayerFoodModifier<Value> extends Modifier<Value, FoodContext> 
 	 * @param player The player that is using the stack
 	 * @return An updated or new value based on the input, context and player
 	 */
-	Value apply(Value value, FoodContext context, PlayerEntity player);
+	@NotNull Value apply(@NotNull Value value, @NotNull FoodContext context, @NotNull PlayerEntity player);
 }

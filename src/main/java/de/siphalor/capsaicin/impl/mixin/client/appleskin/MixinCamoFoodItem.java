@@ -12,6 +12,9 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import squeek.appleskin.helpers.DynamicFood;
 
+/**
+ * Sneakily implements AppleSkin's DynamicFood on CamoFoodItem, if AppleSkin is present.
+ */
 @Mixin(CamoFoodItem.class)
 public interface MixinCamoFoodItem extends DynamicFood {
 	@Shadow
@@ -19,11 +22,11 @@ public interface MixinCamoFoodItem extends DynamicFood {
 
 	@Override
 	default int getDynamicHunger(ItemStack stack, PlayerEntity player) {
-		ItemStack camoFoodStack = getCamoFoodStack(stack, new CamoFoodContextImpl(player));
+		@Nullable ItemStack camoFoodStack = getCamoFoodStack(stack, new CamoFoodContextImpl(player));
 		if (camoFoodStack == null) {
 			return 0;
 		}
-		FoodComponent foodComponent = FoodHandler.INSTANCE.get().withStack(stack).withUser(player).getModifiedFoodComponent();
+		@Nullable FoodComponent foodComponent = FoodHandler.INSTANCE.get().withStack(stack).withUser(player).getModifiedFoodComponent();
 		if (foodComponent == null) {
 			return 0;
 		}
@@ -32,13 +35,13 @@ public interface MixinCamoFoodItem extends DynamicFood {
 
 	@Override
 	default float getDynamicSaturation(ItemStack stack, PlayerEntity player) {
-		ItemStack camoFoodStack = getCamoFoodStack(stack, new CamoFoodContextImpl(player));
+		@Nullable ItemStack camoFoodStack = getCamoFoodStack(stack, new CamoFoodContextImpl(player));
 		if (camoFoodStack == null) {
-			return 0;
+			return 0F;
 		}
-		FoodComponent foodComponent = FoodHandler.INSTANCE.get().withStack(stack).withUser(player).getModifiedFoodComponent();
+		@Nullable FoodComponent foodComponent = FoodHandler.INSTANCE.get().withStack(stack).withUser(player).getModifiedFoodComponent();
 		if (foodComponent == null) {
-			return 0;
+			return 0F;
 		}
 		return foodComponent.getSaturationModifier();
 	}

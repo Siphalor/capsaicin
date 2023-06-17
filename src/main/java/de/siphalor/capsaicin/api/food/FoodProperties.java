@@ -4,6 +4,8 @@ import com.mojang.datafixers.util.Pair;
 import de.siphalor.capsaicin.impl.food.properties.FoodPropertiesImpl;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.item.FoodComponent;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -48,14 +50,14 @@ public interface FoodProperties {
 	 * Gets the list of status effects applied when consuming the stack.
 	 * @return the list of status effects, may be mutated
 	 */
-	List<Pair<StatusEffectInstance, Float>> getStatusEffects();
+	@NotNull List<Pair<StatusEffectInstance, Float>> getStatusEffects();
 
 	/**
 	 * Sets the list of status effects applied when consuming the stack.
 	 * @apiNote The list must be mutable.
 	 * @param statusEffects the new, mutable list of status effects
 	 */
-	void setStatusEffects(List<Pair<StatusEffectInstance, Float>> statusEffects);
+	void setStatusEffects(@NotNull List<Pair<StatusEffectInstance, Float>> statusEffects);
 
 	/**
 	 * Gets whether any properties have been changed
@@ -68,7 +70,8 @@ public interface FoodProperties {
 	 * @param foodComponent the food component
 	 * @return the food properties instance
 	 */
-	static FoodProperties from(FoodComponent foodComponent) {
+	@Contract("_ -> new")
+	static @NotNull FoodProperties from(@NotNull FoodComponent foodComponent) {
 		return FoodPropertiesImpl.from(foodComponent);
 	}
 }

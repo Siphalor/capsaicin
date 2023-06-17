@@ -1,5 +1,7 @@
 package de.siphalor.capsaicin.api.modifier;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * A modifier that may perform changes to a value based on a context.
  * @param <Value> The class of the value
@@ -13,7 +15,7 @@ public interface Modifier<Value, Context> {
 	 * @param context Context for this modification
 	 * @return An updated or new value based on the input and context
 	 */
-	Value apply(Value value, Context context);
+	@NotNull Value apply(@NotNull Value value, @NotNull Context context);
 
 	default boolean ignoreErrors() {
 		return false;

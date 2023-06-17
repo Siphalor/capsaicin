@@ -5,6 +5,8 @@ import de.siphalor.capsaicin.impl.event.EventRegistryImpl;
 import org.jetbrains.annotations.NotNull;
 
 public class FoodEvents {
+	private FoodEvents() {}
+
 	/**
 	 * Event called after the food's hunger and saturation values have been calculated.
 	 * It is undefined whether the status effects and other side effects have been applied yet.

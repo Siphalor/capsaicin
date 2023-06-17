@@ -6,6 +6,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 public class FoodModifications {
+	private FoodModifications() {}
+
 	/**
 	 * Modifier registry for food properties.
 	 * @apiNote Never call {@link Item#getFoodComponent()} from within a properties modifier.

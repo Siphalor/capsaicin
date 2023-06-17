@@ -10,6 +10,8 @@ import squeek.appleskin.helpers.FoodHelper;
 
 @Mixin(FoodHelper.class)
 public class MixinFoodHelper {
+	private MixinFoodHelper() {}
+
 	@Redirect(method = { "canConsume", "getDefaultFoodValues" }, at = @At(
 			value = "INVOKE",
 			target = "Lnet/minecraft/item/Item;getFoodComponent()Lnet/minecraft/item/FoodComponent;")

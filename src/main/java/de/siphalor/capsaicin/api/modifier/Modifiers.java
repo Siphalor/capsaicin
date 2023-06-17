@@ -1,6 +1,7 @@
 package de.siphalor.capsaicin.api.modifier;
 
 import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.NotNull;
 
 public interface Modifiers<Value, Context> {
 	/**
@@ -13,7 +14,7 @@ public interface Modifiers<Value, Context> {
 	 * @param id The unique id of this modifier
 	 * @param priority The priority of this modifier, lower means earlier and higher means later
 	 */
-	void register(Modifier<Value, Context> modifier, Identifier id, int priority);
+	void register(@NotNull Modifier<Value, Context> modifier, @NotNull Identifier id, int priority);
 	/**
 	 * Registers a new modifier with the given unique id and default priority (0). <br />
 	 * Ordering of the modifiers is performed by their priorities (lower=earlier)
@@ -23,9 +24,9 @@ public interface Modifiers<Value, Context> {
 	 * @param modifier The modifier
 	 * @param id The unique id of this modifier
 	 */
-	default void register(Modifier<Value, Context> modifier, Identifier id) {
+	default void register(@NotNull Modifier<Value, Context> modifier, @NotNull Identifier id) {
 		register(modifier, id, 0);
 	}
 
-	Value apply(Value value, Context context);
+	@NotNull Value apply(@NotNull Value value, @NotNull Context context);
 }
