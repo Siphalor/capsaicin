@@ -6,6 +6,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.FoodComponent;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -16,6 +17,7 @@ public interface DynamicFoodPropertiesAccess {
 	 * (certain data is inherited from the current execution context).
 	 * @return the new instance
 	 */
+	@Contract(value = " -> new", pure = true)
 	static @NotNull DynamicFoodPropertiesAccess create() {
 		return FoodHandler.createInheriting();
 	}
@@ -26,6 +28,7 @@ public interface DynamicFoodPropertiesAccess {
 	 * @param stack the stack
 	 * @return this instance
 	 */
+	@Contract("_ -> this")
 	@NotNull DynamicFoodPropertiesAccess withStack(@NotNull ItemStack stack);
 
 	/**
@@ -35,6 +38,7 @@ public interface DynamicFoodPropertiesAccess {
 	 * @param foodProperties the food properties
 	 * @return this instance
 	 */
+	@Contract("_, _ -> this")
 	@NotNull DynamicFoodPropertiesAccess withBlockState(@NotNull BlockState blockState, @NotNull FoodProperties foodProperties);
 
 	/**
@@ -42,13 +46,14 @@ public interface DynamicFoodPropertiesAccess {
 	 * @param user the user
 	 * @return this instance
 	 */
-	DynamicFoodPropertiesAccess withUser(LivingEntity user);
+	@Contract("_ -> this")
+	@NotNull DynamicFoodPropertiesAccess withUser(@NotNull LivingEntity user);
 
 	/**
 	 * Gets the basic, unmodified food component.
 	 * @return the food component
 	 */
-	FoodComponent getStackOriginalFoodComponent();
+	@Nullable FoodComponent getStackOriginalFoodComponent();
 
 	/**
 	 * Returns whether the instance is ready to be used.

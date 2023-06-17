@@ -1,7 +1,8 @@
 package de.siphalor.capsaicin.api.food;
 
 import net.minecraft.entity.LivingEntity;
+import org.jetbrains.annotations.Nullable;
 
 public interface CamoFoodContext {
-	LivingEntity user();
+	@Nullable LivingEntity user();
 }

@@ -19,7 +19,7 @@ public class UniqueModifiers<Value, Context> implements Modifiers<Value, Context
 	private final SortedSet<Entry<Value, Context>> modifiers = new TreeSet<>();
 
 	@Override
-	public void register(Modifier<Value, Context> modifier, Identifier id, int priority) {
+	public void register(@NotNull Modifier<Value, Context> modifier, @NotNull Identifier id, int priority) {
 		if (!registeredIds.add(id)) {
 			throw new IllegalArgumentException("Modifier with id " + id + " already registered!");
 		}
@@ -27,7 +27,7 @@ public class UniqueModifiers<Value, Context> implements Modifiers<Value, Context
 	}
 
 	@Override
-	public Value apply(Value value, Context context) {
+	public @NotNull Value apply(@NotNull Value value, @NotNull Context context) {
 		for (Entry<Value, Context> entry : modifiers) {
 			try {
 				value = entry.modifier().apply(value, context);

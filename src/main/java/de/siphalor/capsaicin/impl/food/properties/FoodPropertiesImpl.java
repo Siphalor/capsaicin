@@ -2,6 +2,8 @@ package de.siphalor.capsaicin.impl.food.properties;
 
 import com.mojang.datafixers.util.Pair;
 import de.siphalor.capsaicin.api.food.FoodProperties;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.item.FoodComponent;
 import org.jetbrains.annotations.ApiStatus;
@@ -13,14 +15,15 @@ import java.util.Collection;
 import java.util.List;
 
 @ApiStatus.Internal
+@Getter
 public class FoodPropertiesImpl implements FoodProperties {
 	private boolean changed;
 	private int hunger;
 	private float saturationModifier;
 	private boolean alwaysEdible;
-	private List<Pair<StatusEffectInstance, Float>> statusEffects;
+	private @NotNull List<Pair<StatusEffectInstance, Float>> statusEffects;
 
-	public static FoodPropertiesImpl from(FoodComponent foodComponent) {
+	public static FoodPropertiesImpl from(@NotNull FoodComponent foodComponent) {
 		return new FoodPropertiesImpl(
 				foodComponent.getHunger(),
 				foodComponent.getSaturationModifier(),
@@ -29,16 +32,11 @@ public class FoodPropertiesImpl implements FoodProperties {
 		);
 	}
 
-	public FoodPropertiesImpl(int hunger, float saturationModifier, boolean alwaysEdible, List<Pair<StatusEffectInstance, Float>> statusEffects) {
+	public FoodPropertiesImpl(int hunger, float saturationModifier, boolean alwaysEdible, @NotNull List<Pair<StatusEffectInstance, Float>> statusEffects) {
 		this.hunger = hunger;
 		this.saturationModifier = saturationModifier;
 		this.alwaysEdible = alwaysEdible;
 		this.statusEffects = new ReactiveList<>(statusEffects);
-	}
-
-	@Override
-	public int getHunger() {
-		return hunger;
 	}
 
 	@Override
@@ -50,21 +48,11 @@ public class FoodPropertiesImpl implements FoodProperties {
 	}
 
 	@Override
-	public float getSaturationModifier() {
-		return saturationModifier;
-	}
-
-	@Override
 	public void setSaturationModifier(float saturationModifier) {
 		if (this.saturationModifier != saturationModifier) {
 			this.saturationModifier = saturationModifier;
 			changed = true;
 		}
-	}
-
-	@Override
-	public boolean isAlwaysEdible() {
-		return alwaysEdible;
 	}
 
 	@Override
@@ -76,27 +64,18 @@ public class FoodPropertiesImpl implements FoodProperties {
 	}
 
 	@Override
-	public List<Pair<StatusEffectInstance, Float>> getStatusEffects() {
-		return statusEffects;
-	}
-
-	@Override
-	public void setStatusEffects(List<Pair<StatusEffectInstance, Float>> statusEffects) {
+	public void setStatusEffects(@NotNull List<Pair<StatusEffectInstance, Float>> statusEffects) {
 		if (this.statusEffects != statusEffects) {
 			this.statusEffects = statusEffects;
 			changed = true;
 		}
 	}
 
-	@Override
-	public boolean isChanged() {
-		return changed;
-	}
-
+	@EqualsAndHashCode(callSuper = false)
 	class ReactiveList<T> extends AbstractList<T> {
-		private final List<T> delegate;
+		private final @NotNull List<T> delegate;
 
-		ReactiveList(List<T> delegate) {
+		ReactiveList(@NotNull List<T> delegate) {
 			this.delegate = delegate;
 		}
 

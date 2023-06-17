@@ -16,12 +16,13 @@ import java.util.ArrayList;
  * AppleSkin plugin for Capsaicin so that Capsaicin's food properties are visualized correctly.
  */
 public class AppleSkinPlugin implements AppleSkinApi {
-	private static final boolean polymerLoaded = FabricLoader.getInstance().isModLoaded("polymer");
+	private static final boolean POLYMER_LOADED = FabricLoader.getInstance().isModLoaded("polymer");
 
 	@Override
 	public void registerEvents() {
 		FoodValuesEvent.EVENT.register(event -> {
-			if (polymerLoaded) {
+			if (POLYMER_LOADED) {
+				// We can now safely proceed to load Polymer classes
 				if (PolymerProxy.isPolymerItem(event.itemStack)) {
 					// Already handled by MixinPolymerAppleskinPlugin
 					return;

@@ -50,6 +50,10 @@ dependencies {
 	mappings "net.fabricmc:yarn:${project.minecraft_version}+build.${project.yarn_mappings}:v2"
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
+	// Lombok
+	compileOnly(annotationProcessor("org.projectlombok:lombok:$project.lombok_version"))
+	testmodCompileOnly(testmodAnnotationProcessor("org.projectlombok:lombok:$project.lombok_version"))
+
 	// AppleSkin
 	modCompileOnly "squeek.appleskin:appleskin-fabric:mc1.18.2-2.4.0:api"
 	modLocalRuntime(modCompileOnly("squeek.appleskin:appleskin-fabric:mc1.18.2-2.4.0"))

@@ -20,6 +20,8 @@ import squeek.appleskin.api.food.FoodValues;
 
 @Mixin(AppleSkinCompatibility.class)
 public class MixinPolymerAppleskinPlugin {
+	private MixinPolymerAppleskinPlugin() {}
+
 	@Inject(method = "lambda$registerEvents$0", remap = false, at = @At(
 			value = "INVOKE",
 			target = "Lsqueek/appleskin/api/food/FoodValues;<init>(IF)V"

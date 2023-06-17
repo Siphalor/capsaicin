@@ -4,6 +4,7 @@ import com.mojang.datafixers.util.Pair;
 import de.siphalor.capsaicin.api.food.*;
 import de.siphalor.capsaicin.impl.food.properties.FoodPropertiesImpl;
 import de.siphalor.capsaicin.impl.util.IItem;
+import lombok.Getter;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
@@ -20,12 +21,15 @@ import java.util.ArrayList;
 public class FoodHandler implements DynamicFoodPropertiesAccess {
 	public static final ThreadLocal<FoodHandler> INSTANCE = ThreadLocal.withInitial(FoodHandler::new);
 
-	private FoodProperties foodProperties;
+	private @Nullable FoodProperties foodProperties;
 	private int eatingTime;
-	private ItemStack stack;
-	private FoodComponent stackFoodComponent;
-	private BlockState blockState;
-	private LivingEntity user;
+	@Getter
+	private @Nullable ItemStack stack;
+	private @Nullable FoodComponent stackFoodComponent;
+	@Getter
+	private @Nullable BlockState blockState;
+	@Getter
+	private @Nullable LivingEntity user;
 
 	public static FoodHandler createInheriting() {
 		FoodHandler parent = INSTANCE.get();
@@ -38,20 +42,8 @@ public class FoodHandler implements DynamicFoodPropertiesAccess {
 		return foodHandler;
 	}
 
-	public ItemStack getStack() {
-		return stack;
-	}
-
-	public FoodComponent getStackOriginalFoodComponent() {
+	public @Nullable FoodComponent getStackOriginalFoodComponent() {
 		return stackFoodComponent;
-	}
-
-	public BlockState getBlockState() {
-		return blockState;
-	}
-
-	public LivingEntity getUser() {
-		return user;
 	}
 
 	public @NotNull FoodHandler withStack(@NotNull ItemStack stack) {
@@ -94,7 +86,7 @@ public class FoodHandler implements DynamicFoodPropertiesAccess {
 		return this;
 	}
 
-	public FoodHandler withUser(LivingEntity user) {
+	public @NotNull FoodHandler withUser(@NotNull LivingEntity user) {
 		this.user = user;
 		return this;
 	}
@@ -124,13 +116,13 @@ public class FoodHandler implements DynamicFoodPropertiesAccess {
 			return null;
 		}
 
-		FoodProperties propertiesIn;
+		@NotNull FoodProperties propertiesIn;
 		if (foodProperties == null) {
 			propertiesIn = new FoodPropertiesImpl(0, 0F, false, new ArrayList<>());
 		} else {
 			propertiesIn = new FoodPropertiesImpl(foodProperties.getHunger(), foodProperties.getSaturationModifier(), false, new ArrayList<>());
 		}
-		FoodProperties propertiesOut = getFoodProperties(propertiesIn);
+		@NotNull FoodProperties propertiesOut = getFoodProperties(propertiesIn);
 		if (propertiesOut == propertiesIn && !propertiesIn.isChanged()) {
 			if (stackFoodComponent != null) {
 				return stackFoodComponent;
@@ -141,7 +133,7 @@ public class FoodHandler implements DynamicFoodPropertiesAccess {
 					.build();
 		}
 
-		FoodComponent.Builder builder = new FoodComponent.Builder()
+		@NotNull FoodComponent.Builder builder = new FoodComponent.Builder()
 				.hunger(propertiesOut.getHunger())
 				.saturationModifier(propertiesOut.getSaturationModifier());
 		if (propertiesOut.isAlwaysEdible()) {
@@ -150,16 +142,18 @@ public class FoodHandler implements DynamicFoodPropertiesAccess {
 		for (Pair<StatusEffectInstance, Float> statusEffect : propertiesOut.getStatusEffects()) {
 			builder.statusEffect(statusEffect.getFirst(), statusEffect.getSecond());
 		}
-		if (stackFoodComponent.isSnack()) {
-			builder.snack();
-		}
-		if (stackFoodComponent.isMeat()) {
-			builder.meat();
+		if (stackFoodComponent != null) {
+			if (stackFoodComponent.isSnack()) {
+				builder.snack();
+			}
+			if (stackFoodComponent.isMeat()) {
+				builder.meat();
+			}
 		}
 		return builder.build();
 	}
 
-	protected FoodProperties getFoodProperties(FoodProperties foodProperties) {
+	protected @NotNull FoodProperties getFoodProperties(@NotNull FoodProperties foodProperties) {
 		return FoodModifications.PROPERTIES_MODIFIERS.apply(foodProperties, createContext());
 	}
 

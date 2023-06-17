@@ -14,6 +14,7 @@ import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
 import java.util.List;
 import java.util.Set;
 
+@SuppressWarnings("unused") // declared in mixin config json
 @ApiStatus.Internal
 public class CapsaicinMixinConfig implements IMixinConfigPlugin {
 	private final boolean appleskinLoaded = FabricLoader.getInstance().isModLoaded("appleskin");
