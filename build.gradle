@@ -55,11 +55,11 @@ dependencies {
 	testmodCompileOnly(testmodAnnotationProcessor("org.projectlombok:lombok:$project.lombok_version"))
 
 	// AppleSkin
-	modCompileOnly "squeek.appleskin:appleskin-fabric:mc1.18.2-2.4.0:api"
-	modLocalRuntime(modCompileOnly("squeek.appleskin:appleskin-fabric:mc1.18.2-2.4.0"))
+	modCompileOnly "squeek.appleskin:appleskin-fabric:$project.appleskin_version:api"
+	modLocalRuntime(modCompileOnly("squeek.appleskin:appleskin-fabric:$project.appleskin_version"))
 
 	// Polymer
-	modCompileOnly "eu.pb4:polymer:0.2.0-rc.4.5+1.18.2"
+	modCompileOnly "eu.pb4:polymer:$project.polymer_version"
 
 	// Testmod stuff
 	testmodImplementation sourceSets.main.output
