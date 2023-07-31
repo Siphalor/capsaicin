@@ -23,8 +23,7 @@
 		"capsaicin.mixins.json"
 	],
 	"depends": {
-		"fabricloader": ">=0.14.12",
-		"fabric": "*"
+		"fabricloader": ">=0.14.12"
 	},
 	"breaks": {
 		"minecraft": [
