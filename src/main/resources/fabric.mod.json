@@ -24,10 +24,12 @@
 	],
 	"depends": {
 		"fabricloader": ">=0.14.12",
-		"fabric": "*",
+		"fabric": "*"
+	},
+	"breaks": {
 		"minecraft": [
-			">1.17",
-			"<1.19"
+			"<1.18",
+			">1.18.999"
 		]
 	},
 	"custom": {
