@@ -23,15 +23,17 @@
 		"capsaicin.mixins.json"
 	],
 	"depends": {
-		"fabricloader": ">=0.14.12",
-		"fabric": "*",
-		"minecraft": [
-			">1.18",
-			"<1.19.3"
-		]
+		"fabricloader": ">=0.14.12"
 	},
 	"breaks": {
-		"polymer": "<0.3.13"
+		"minecraft": [
+			"<1.19.3",
+			">1.19.4"
+		],
+		"polymer": [
+			"<0.3.13",
+			">=0.4"
+		]
 	},
 	"custom": {
 		"modmenu:api": true,

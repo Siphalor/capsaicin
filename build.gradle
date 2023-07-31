@@ -138,7 +138,7 @@ static def getProjectChangelog() {
 if (project.hasProperty("githubToken")) {
 	githubRelease {
 		token project.githubToken
-		targetCommitish = project.minecraft_major_version
+		targetCommitish = project.git_branch
 		releaseName = "Version $project.mod_version for $project.mod_mc_version_spec"
 		body = getProjectChangelog()
 		releaseAssets remapJar.getArchiveFile()
