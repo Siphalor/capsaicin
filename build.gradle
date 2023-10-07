@@ -59,7 +59,9 @@ dependencies {
 	modLocalRuntime(modCompileOnly("squeek.appleskin:appleskin-fabric:$project.appleskin_version")) {
 		exclude module: "modmenu"
 	}
-	modLocalRuntime "net.fabricmc.fabric-api:fabric-api:$project.fabric_api_version"
+	// Transitive
+	modLocalRuntime("me.shedaniel.cloth:cloth-config-fabric:$project.cloth_config_version")
+	modLocalRuntime(modCompileOnly("net.fabricmc.fabric-api:fabric-api:$project.fabric_api_version"))
 
 	// Polymer
 	modCompileOnly "eu.pb4:polymer-core:$project.polymer_version"
