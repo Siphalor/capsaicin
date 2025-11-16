@@ -1,6 +1,6 @@
 package de.siphalor.capsaicin.impl.mixin;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.ApiStatus;
 import org.spongepowered.asm.mixin.Mixin;
 

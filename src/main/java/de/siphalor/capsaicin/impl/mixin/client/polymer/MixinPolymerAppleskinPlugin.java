@@ -4,12 +4,12 @@ import de.siphalor.capsaicin.impl.food.FoodHandler;
 import eu.pb4.polymer.core.api.client.ClientPolymerItem;
 import eu.pb4.polymer.core.api.item.PolymerItemUtils;
 import eu.pb4.polymer.core.impl.client.compat.AppleSkinCompatibility;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.item.FoodComponent;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.Minecraft;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -26,23 +26,23 @@ public class MixinPolymerAppleskinPlugin {
 			value = "INVOKE",
 			target = "Lsqueek/appleskin/api/food/FoodValues;<init>(IF)V"
 	), cancellable = true, locals = LocalCapture.CAPTURE_FAILSOFT)
-	private static void fixPolymerAppleskin(FoodValuesEvent event, CallbackInfo ci, Identifier id, ClientPolymerItem polymerItem) {
+	private static void fixPolymerAppleskin(FoodValuesEvent event, CallbackInfo ci, ResourceLocation id, ClientPolymerItem polymerItem) {
 		Item actualItem = polymerItem.registryEntry();
 		if (actualItem != null) {
 			FoodHandler foodHandler = FoodHandler.INSTANCE.get();
 			ItemStack actualStack = new ItemStack(actualItem, event.itemStack.getCount());
-			NbtCompound realNbt = event.itemStack.getSubNbt(PolymerItemUtils.REAL_TAG);
+			CompoundTag realNbt = event.itemStack.getTagElement(PolymerItemUtils.REAL_TAG);
 			if (realNbt != null) {
-				actualStack.setNbt(realNbt);
+				actualStack.setTag(realNbt);
 			}
-			foodHandler.withUser(MinecraftClient.getInstance().player).withStack(actualStack);
-			FoodComponent originalFoodComponent = foodHandler.getStackOriginalFoodComponent();
+			foodHandler.withUser(Minecraft.getInstance().player).withStack(actualStack);
+			FoodProperties originalFoodComponent = foodHandler.getStackOriginalFoodComponent();
 			if (originalFoodComponent != null) {
-				event.defaultFoodValues = new FoodValues(originalFoodComponent.getHunger(), originalFoodComponent.getSaturationModifier());
+				event.defaultFoodValues = new FoodValues(originalFoodComponent.getNutrition(), originalFoodComponent.getSaturationModifier());
 			}
-			FoodComponent foodComponent = foodHandler.getModifiedFoodComponent();
+			FoodProperties foodComponent = foodHandler.getModifiedFoodComponent();
 			if (foodComponent != null) {
-				event.modifiedFoodValues = new FoodValues(foodComponent.getHunger(), foodComponent.getSaturationModifier());
+				event.modifiedFoodValues = new FoodValues(foodComponent.getNutrition(), foodComponent.getSaturationModifier());
 			}
 			foodHandler.reset();
 			ci.cancel();

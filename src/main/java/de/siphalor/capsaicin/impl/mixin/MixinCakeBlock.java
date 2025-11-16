@@ -5,17 +5,17 @@ import de.siphalor.capsaicin.api.food.FoodEvents;
 import de.siphalor.capsaicin.impl.food.FoodHandler;
 import de.siphalor.capsaicin.impl.food.event.EatenEvent;
 import de.siphalor.capsaicin.impl.food.properties.FoodPropertiesImpl;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.CakeBlock;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.player.HungerManager;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.FoodComponent;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.WorldAccess;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.food.FoodData;
+import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.CakeBlock;
+import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.ApiStatus;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -28,26 +28,26 @@ import java.util.ArrayList;
 @ApiStatus.Internal
 @Mixin(CakeBlock.class)
 public class MixinCakeBlock {
-	@Inject(method = "tryEat", at = @At("HEAD"))
-	private static void onEat(WorldAccess world, BlockPos pos, BlockState state, PlayerEntity player, CallbackInfoReturnable<ActionResult> cir) {
+	@Inject(method = "eat", at = @At("HEAD"))
+	private static void onEat(LevelAccessor world, BlockPos pos, BlockState state, Player player, CallbackInfoReturnable<InteractionResult> cir) {
 		FoodHandler foodHandler = FoodHandler.INSTANCE.get();
 		foodHandler.reset();
 		foodHandler.withUser(player);
 		foodHandler.withBlockState(state, new FoodPropertiesImpl(2, 0.1F, false, new ArrayList<>()));
 	}
 
-	@Redirect(method = "tryEat", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/HungerManager;add(IF)V"))
-	private static void eat(HungerManager hungerManager, int hunger, float saturationModifier) {
+	@Redirect(method = "eat", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/food/FoodData;eat(IF)V"))
+	private static void eat(FoodData hungerManager, int hunger, float saturationModifier) {
 		FoodHandler foodHandler = FoodHandler.INSTANCE.get();
-		FoodComponent foodComponent = foodHandler.getModifiedFoodComponent();
+		FoodProperties foodComponent = foodHandler.getModifiedFoodComponent();
 
 		if (foodComponent != null) {
 			LivingEntity user = foodHandler.getUser();
-			Random random = user.getRandom();
-			hungerManager.add(foodComponent.getHunger(), foodComponent.getSaturationModifier());
-			for (Pair<StatusEffectInstance, Float> effect : foodComponent.getStatusEffects()) {
+			RandomSource random = user.getRandom();
+			hungerManager.eat(foodComponent.getNutrition(), foodComponent.getSaturationModifier());
+			for (Pair<MobEffectInstance, Float> effect : foodComponent.getEffects()) {
 				if (random.nextFloat() < effect.getSecond()) {
-					user.addStatusEffect(effect.getFirst());
+					user.addEffect(effect.getFirst());
 				}
 			}
 			FoodEvents.EATEN.emit(new EatenEvent(foodHandler.createContext()));

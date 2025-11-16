@@ -2,7 +2,7 @@ package de.siphalor.capsaicin.impl.modifier;
 
 import de.siphalor.capsaicin.api.modifier.Modifier;
 import de.siphalor.capsaicin.api.modifier.Modifiers;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
@@ -15,11 +15,11 @@ import java.util.*;
  */
 @ApiStatus.Internal
 public class UniqueModifiers<Value, Context> implements Modifiers<Value, Context> {
-	private final Set<Identifier> registeredIds = new HashSet<>();
+	private final Set<ResourceLocation> registeredIds = new HashSet<>();
 	private final SortedSet<Entry<Value, Context>> modifiers = new TreeSet<>();
 
 	@Override
-	public void register(@NotNull Modifier<Value, Context> modifier, @NotNull Identifier id, int priority) {
+	public void register(@NotNull Modifier<Value, Context> modifier, @NotNull ResourceLocation id, int priority) {
 		if (!registeredIds.add(id)) {
 			throw new IllegalArgumentException("Modifier with id " + id + " already registered!");
 		}
@@ -44,11 +44,11 @@ public class UniqueModifiers<Value, Context> implements Modifiers<Value, Context
 
 	private static class Entry<Value, Context> implements Comparable<Entry<Value, Context>> {
 		private final Modifier<Value, Context> modifier;
-		private final Identifier id;
+		private final ResourceLocation id;
 		private final long idHash;
 		private final int priority;
 
-		private Entry(@NotNull Modifier<Value, Context> modifier, @NotNull Identifier id, int priority) {
+		private Entry(@NotNull Modifier<Value, Context> modifier, @NotNull ResourceLocation id, int priority) {
 			this.modifier = modifier;
 			this.id = id;
 			this.idHash = id.hashCode();
@@ -68,7 +68,7 @@ public class UniqueModifiers<Value, Context> implements Modifiers<Value, Context
 			return modifier;
 		}
 
-		public Identifier id() {
+		public ResourceLocation id() {
 			return id;
 		}
 

@@ -5,12 +5,11 @@ import de.siphalor.capsaicin.api.food.*;
 import de.siphalor.capsaicin.impl.food.properties.FoodPropertiesImpl;
 import de.siphalor.capsaicin.impl.util.IItem;
 import lombok.Getter;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.item.FoodComponent;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -25,7 +24,7 @@ public class FoodHandler implements DynamicFoodPropertiesAccess {
 	private int eatingTime;
 	@Getter
 	private @Nullable ItemStack stack;
-	private @Nullable FoodComponent stackFoodComponent;
+	private @Nullable net.minecraft.world.food.FoodProperties stackFoodComponent;
 	@Getter
 	private @Nullable BlockState blockState;
 	@Getter
@@ -42,7 +41,7 @@ public class FoodHandler implements DynamicFoodPropertiesAccess {
 		return foodHandler;
 	}
 
-	public @Nullable FoodComponent getStackOriginalFoodComponent() {
+	public @Nullable net.minecraft.world.food.FoodProperties getStackOriginalFoodComponent() {
 		return stackFoodComponent;
 	}
 
@@ -69,7 +68,7 @@ public class FoodHandler implements DynamicFoodPropertiesAccess {
 		if (item != null) {
 			// Must not call stack.getMaxUseTime() here!
 			// This would cause a stack overflow
-			eatingTime = item.getMaxUseTime(this.stack);
+			eatingTime = item.getUseDuration(this.stack);
 		} else {
 			eatingTime = 0;
 		}
@@ -111,7 +110,7 @@ public class FoodHandler implements DynamicFoodPropertiesAccess {
 	}
 
 	@Override
-	public @Nullable FoodComponent getModifiedFoodComponent() {
+	public @Nullable net.minecraft.world.food.FoodProperties getModifiedFoodComponent() {
 		if (!isReady()) {
 			return null;
 		}
@@ -127,24 +126,24 @@ public class FoodHandler implements DynamicFoodPropertiesAccess {
 			if (stackFoodComponent != null) {
 				return stackFoodComponent;
 			}
-			return new FoodComponent.Builder()
-					.hunger(propertiesIn.getHunger())
-					.saturationModifier(propertiesIn.getSaturationModifier())
+			return new net.minecraft.world.food.FoodProperties.Builder()
+					.nutrition(propertiesIn.getHunger())
+					.saturationMod(propertiesIn.getSaturationModifier())
 					.build();
 		}
 
-		@NotNull FoodComponent.Builder builder = new FoodComponent.Builder()
-				.hunger(propertiesOut.getHunger())
-				.saturationModifier(propertiesOut.getSaturationModifier());
+		@NotNull net.minecraft.world.food.FoodProperties.Builder builder = new net.minecraft.world.food.FoodProperties.Builder()
+				.nutrition(propertiesOut.getHunger())
+				.saturationMod(propertiesOut.getSaturationModifier());
 		if (propertiesOut.isAlwaysEdible()) {
-			builder.alwaysEdible();
+			builder.alwaysEat();
 		}
-		for (Pair<StatusEffectInstance, Float> statusEffect : propertiesOut.getStatusEffects()) {
-			builder.statusEffect(statusEffect.getFirst(), statusEffect.getSecond());
+		for (Pair<MobEffectInstance, Float> statusEffect : propertiesOut.getStatusEffects()) {
+			builder.effect(statusEffect.getFirst(), statusEffect.getSecond());
 		}
 		if (stackFoodComponent != null) {
-			if (stackFoodComponent.isSnack()) {
-				builder.snack();
+			if (stackFoodComponent.isFastFood()) {
+				builder.fast();
 			}
 			if (stackFoodComponent.isMeat()) {
 				builder.meat();

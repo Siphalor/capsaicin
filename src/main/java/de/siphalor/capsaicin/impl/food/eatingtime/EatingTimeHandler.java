@@ -1,7 +1,7 @@
 package de.siphalor.capsaicin.impl.food.eatingtime;
 
 import de.siphalor.capsaicin.impl.food.FoodHandler;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.ApiStatus;
 
 @SuppressWarnings("unused") // Used via ASM in the mixin config

@@ -4,8 +4,7 @@ import com.mojang.datafixers.util.Pair;
 import de.siphalor.capsaicin.api.food.FoodProperties;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.item.FoodComponent;
+import net.minecraft.world.effect.MobEffectInstance;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
@@ -21,18 +20,18 @@ public class FoodPropertiesImpl implements FoodProperties {
 	private int hunger;
 	private float saturationModifier;
 	private boolean alwaysEdible;
-	private @NotNull List<Pair<StatusEffectInstance, Float>> statusEffects;
+	private @NotNull List<Pair<MobEffectInstance, Float>> statusEffects;
 
-	public static FoodPropertiesImpl from(@NotNull FoodComponent foodComponent) {
+	public static FoodPropertiesImpl from(@NotNull net.minecraft.world.food.FoodProperties foodComponent) {
 		return new FoodPropertiesImpl(
-				foodComponent.getHunger(),
+				foodComponent.getNutrition(),
 				foodComponent.getSaturationModifier(),
-				foodComponent.isAlwaysEdible(),
-				new ArrayList<>(foodComponent.getStatusEffects())
+				foodComponent.canAlwaysEat(),
+				new ArrayList<>(foodComponent.getEffects())
 		);
 	}
 
-	public FoodPropertiesImpl(int hunger, float saturationModifier, boolean alwaysEdible, @NotNull List<Pair<StatusEffectInstance, Float>> statusEffects) {
+	public FoodPropertiesImpl(int hunger, float saturationModifier, boolean alwaysEdible, @NotNull List<Pair<MobEffectInstance, Float>> statusEffects) {
 		this.hunger = hunger;
 		this.saturationModifier = saturationModifier;
 		this.alwaysEdible = alwaysEdible;
@@ -64,7 +63,7 @@ public class FoodPropertiesImpl implements FoodProperties {
 	}
 
 	@Override
-	public void setStatusEffects(@NotNull List<Pair<StatusEffectInstance, Float>> statusEffects) {
+	public void setStatusEffects(@NotNull List<Pair<MobEffectInstance, Float>> statusEffects) {
 		if (this.statusEffects != statusEffects) {
 			this.statusEffects = statusEffects;
 			changed = true;

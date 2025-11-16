@@ -1,7 +1,7 @@
 package de.siphalor.capsaicin.impl.util;
 
-import net.minecraft.item.FoodComponent;
+import net.minecraft.world.food.FoodProperties;
 
 public interface IItem {
-	FoodComponent capsaicin$getVanillaFoodComponent();
+	FoodProperties capsaicin$getVanillaFoodComponent();
 }

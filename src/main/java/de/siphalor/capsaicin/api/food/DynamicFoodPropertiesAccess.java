@@ -1,10 +1,9 @@
 package de.siphalor.capsaicin.api.food;
 
 import de.siphalor.capsaicin.impl.food.FoodHandler;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.FoodComponent;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -53,7 +52,7 @@ public interface DynamicFoodPropertiesAccess {
 	 * Gets the basic, unmodified food component.
 	 * @return the food component
 	 */
-	@Nullable FoodComponent getStackOriginalFoodComponent();
+	@Nullable net.minecraft.world.food.FoodProperties getStackOriginalFoodComponent();
 
 	/**
 	 * Returns whether the instance is ready to be used.
@@ -69,7 +68,7 @@ public interface DynamicFoodPropertiesAccess {
 	 * @return the food component
 	 * @see #isReady()
 	 */
-	@Nullable FoodComponent getModifiedFoodComponent();
+	@Nullable net.minecraft.world.food.FoodProperties getModifiedFoodComponent();
 
 	/**
 	 * Gets the modified eating time or <code>0</code> if the instance is not ready.

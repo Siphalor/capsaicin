@@ -1,0 +1,22 @@
+[versions]
+cloth-config = "13.0.114"
+appleskin = "mc1.20.3-2.5.1"
+fabric-api = "0.97.3+1.20.4"
+java = "17"
+minecraft = "1.20.4"
+parchment = "2024.04.14"
+polymer = "0.7.2+1.20.4"
+
+[libraries]
+appleskin = { group = "squeek.appleskin", name = "appleskin-fabric", version.ref = "appleskin" }
+cloth-config = { group = "me.shedaniel.cloth", name = "cloth-config-fabric", version.ref = "cloth-config" }
+fabric-api = { group = "net.fabricmc.fabric-api", name = "fabric-api", version.ref = "fabric-api" }
+minecraft = { group = "com.mojang", name = "minecraft", version.ref = "minecraft" }
+polymer = { group = "eu.pb4", name = "polymer-core", version.ref = "polymer" }
+
+[bundles]
+transitive = [
+	"cloth-config",
+	"fabric-api"
+]
+
