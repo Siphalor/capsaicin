@@ -85,6 +85,7 @@ public interface DynamicFoodPropertiesAccess {
 	 * @return the consumable component
 	*/
 	@Nullable Consumable getModifiedConsumableComponent();
+	//# end
 
 	//# if MC_VERSION_NUMBER < 12005
 	//- /**

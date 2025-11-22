@@ -52,7 +52,7 @@ public class FoodPropertiesImpl implements FoodProperties {
 				foodProperties.getHunger(),
 				foodProperties.getSaturationModifier(),
 				foodProperties.isAlwaysEdible()
-				/*# if MC_VERSION_NUMBER < 12102 *//*- , foodComponent.getStatusEffects() *//*# end */
+				/*# if MC_VERSION_NUMBER < 12102 *//*- , foodProperties.getStatusEffects() *//*# end */
 		);
 	}
 

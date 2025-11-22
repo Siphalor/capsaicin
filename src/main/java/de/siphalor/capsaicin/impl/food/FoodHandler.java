@@ -175,7 +175,7 @@ public class FoodHandler implements DynamicFoodPropertiesAccess {
 		if (foodProperties == null) {
 			//# if MC_VERSION_NUMBER >= 12102
 			propertiesIn = new FoodPropertiesImpl(0, 0F, false);
-			//# elif MC_VERSION_NUMBER >= 12005
+			//# else
 			//- propertiesIn = new FoodPropertiesImpl(0, 0F, false, Collections.emptyList());
 			//# end
 		} else {
@@ -305,11 +305,12 @@ public class FoodHandler implements DynamicFoodPropertiesAccess {
 	}
 	//# end
 
-	//# if MC_VERSION_NUMBER < 12102
+	//# if MC_VERSION_NUMBER >= 12102
+	//# elif MC_VERSION_NUMBER >= 12005
 	//- public float calcModifiedEatingTimeSeconds(float eatingTime, FoodContext foodContext) {
-	//- 	return FoodModifications.EATING_TIME_SECONDS_MODIFIERS.apply(eatingTime, foodContext);
+		//- return FoodModifications.EATING_TIME_SECONDS_MODIFIERS.apply(eatingTime, foodContext);
 	//- }
-	//# elif MC_VERSION_NUMBER < 12005
+	//# else
 	//- @Override
 	//- public int getModifiedEatingTime() {
 	//- 	if (!isReady()) {

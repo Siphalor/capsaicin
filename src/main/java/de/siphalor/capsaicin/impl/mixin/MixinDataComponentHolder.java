@@ -33,11 +33,13 @@ public interface MixinDataComponentHolder {
 					//noinspection unchecked
 					cir.setReturnValue((T) FoodHandler.INSTANCE.get().withStack(stack).getModifiedFoodComponent());
 				}
+			//# if MC_VERSION_NUMBER >= 12102
 			} else if (componentType == DataComponents.CONSUMABLE) {
 				if (getComponents().has(DataComponents.CONSUMABLE) && getComponents().has(DataComponents.FOOD)) {
 					//noinspection unchecked
 					cir.setReturnValue((T) FoodHandler.INSTANCE.get().withStack(stack).getModifiedConsumableComponent());
 				}
+			//# end
 			}
 		}
 	}
@@ -51,11 +53,13 @@ public interface MixinDataComponentHolder {
 					//noinspection unchecked
 					cir.setReturnValue((T) FoodHandler.INSTANCE.get().withStack(stack).getModifiedFoodComponent());
 				}
+			//# if MC_VERSION_NUMBER >= 12102
 			} else if (componentType == DataComponents.CONSUMABLE) {
 				if (getComponents().has(DataComponents.CONSUMABLE) && getComponents().has(DataComponents.FOOD)) {
 					//noinspection unchecked
 					cir.setReturnValue((T) FoodHandler.INSTANCE.get().withStack(stack).getModifiedConsumableComponent());
 				}
+			//# end
 			}
 		}
 	}
