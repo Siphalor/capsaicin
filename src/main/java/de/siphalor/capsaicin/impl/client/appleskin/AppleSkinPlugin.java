@@ -1,5 +1,6 @@
 package de.siphalor.capsaicin.impl.client.appleskin;
 
+import de.siphalor.capsaicin.api.food.FoodContext;
 import de.siphalor.capsaicin.api.food.FoodModifications;
 import de.siphalor.capsaicin.api.food.FoodProperties;
 import de.siphalor.capsaicin.impl.client.polymer.PolymerProxy;
@@ -41,31 +42,38 @@ public class AppleSkinPlugin implements AppleSkinApi {
 			//- );
 			//- FoodValues defaultFoodValues = event.defaultFoodValues;
 			//# end
-			FoodProperties newFoodProperties = FoodModifications.PROPERTIES_MODIFIERS.apply(
-					foodProperties,
-					new FoodContextImpl(
-							event.itemStack,
-							null,
-							//# if MC_VERSION_NUMBER >= 12005
-							defaultFoodValues.nutrition(),
-							defaultFoodValues.saturation(),
-							defaultFoodValues.eatSeconds(),
-							//# else
-							//- defaultFoodValues.hunger,
-							//- defaultFoodValues.saturationModifier,
-							//# end
-							event.player
-					)
+			FoodContext context = new FoodContextImpl(
+					event.itemStack,
+					null,
+					//# if MC_VERSION_NUMBER >= 12005
+					defaultFoodValues.nutrition(),
+					defaultFoodValues.saturation(),
+					//# else
+					//- defaultFoodValues.hunger,
+					//- defaultFoodValues.saturationModifier,
+					//# end
+					event.player
 			);
-			if (foodProperties != newFoodProperties || foodProperties.isChanged()) {
+			FoodProperties newFoodProperties = FoodModifications.PROPERTIES_MODIFIERS.apply(foodProperties, context);
+			boolean changed = foodProperties != newFoodProperties || foodProperties.isChanged();
+			//# if MC_VERSION_NUMBER >= 12005 && MC_VERSION_NUMBER < 12102
+			//- float newEatingTimeSeconds = FoodModifications.EATING_TIME_SECONDS_MODIFIERS.apply(
+			//- 		event.modifiedFoodComponent.eatSeconds(),
+			//- 		context
+			//- );
+			//- changed |= newEatingTimeSeconds != event.modifiedFoodComponent.eatSeconds();
+			//# end
+			if (changed) {
 				//# if MC_VERSION_NUMBER >= 12005
 				event.modifiedFoodComponent = new net.minecraft.world.food.FoodProperties(
 						newFoodProperties.getHunger(),
 						newFoodProperties.getSaturationModifier(),
-						newFoodProperties.isAlwaysEdible(),
-						newFoodProperties.getEatingTimeInSeconds(),
-						/*# if MC_VERSION_NUMBER >= 12100 */defaultFoodValues.usingConvertsTo(),/*# end */
-						newFoodProperties.getStatusEffects()
+						newFoodProperties.isAlwaysEdible()
+						//# if MC_VERSION_NUMBER < 12102
+						//- , newEatingTimeSeconds,
+						//- /*# if MC_VERSION_NUMBER >= 12100 */defaultFoodValues.usingConvertsTo(),/*# end */
+						//- newFoodProperties.getStatusEffects()
+						//# end
 				);
 				//# else
 				//- event.modifiedFoodValues = new FoodValues(newFoodProperties.getHunger(), newFoodProperties.getSaturationModifier());

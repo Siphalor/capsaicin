@@ -38,12 +38,4 @@ public interface FoodContext {
 	 * @return the saturation modifier
 	 */
 	float originalFoodSaturationModifier();
-
-	//# if MC_VERSION_NUMBER >= 12005
-	/**
-	 * The eating time in seconds <b>before any modifications</b>.
-	 * @return the eating time in seconds
-	 */
-	float originalEatingTimeInSeconds();
-	//# end
 }

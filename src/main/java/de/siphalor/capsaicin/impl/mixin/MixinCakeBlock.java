@@ -6,13 +6,16 @@ import de.siphalor.capsaicin.impl.food.FoodHandler;
 import de.siphalor.capsaicin.impl.food.event.EatenEvent;
 import de.siphalor.capsaicin.impl.food.properties.FoodPropertiesImpl;
 import net.minecraft.core.BlockPos;
-import net.minecraft.util.RandomSource;
+//- import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionResult;
 //- import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodData;
 import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.Consumable;
+import net.minecraft.world.item.consume_effects.ConsumeEffect;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.CakeBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -24,7 +27,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 //- import java.util.ArrayList;
-import java.util.Collections;
+//- import java.util.Collections;
 
 @ApiStatus.Internal
 @Mixin(CakeBlock.class)
@@ -34,8 +37,8 @@ public class MixinCakeBlock {
 		FoodHandler foodHandler = FoodHandler.INSTANCE.get();
 		foodHandler.reset();
 		foodHandler.withUser(player);
-		//# if MC_VERSION_NUMBER >= 12005
-		foodHandler.withBlockState(state, new FoodPropertiesImpl(2, 0.1F, 0F, false, Collections.emptyList()));
+		//# if MC_VERSION_NUMBER >= 12102
+		foodHandler.withBlockState(state, new FoodPropertiesImpl(2, 0.1F, false));
 		//# else
 		//- foodHandler.withBlockState(state, new FoodPropertiesImpl(2, 0.1F, false, Collections.emptyList()));
 		//# end
@@ -48,20 +51,30 @@ public class MixinCakeBlock {
 
 		if (foodComponent != null) {
 			LivingEntity user = foodHandler.getUser();
-			RandomSource random = user.getRandom();
 			//# if MC_VERSION_NUMBER >= 12005
 			hungerManager.eat(foodComponent.nutrition(), foodComponent.saturation());
-			for (FoodProperties.PossibleEffect effect : foodComponent.effects()) {
-				if (random.nextFloat() < effect.probability()) {
-					user.addEffect(effect.effect());
+			//# if MC_VERSION_NUMBER >= 12102
+			Consumable consumableComponent = foodHandler.getModifiedConsumableComponent();
+			if (consumableComponent != null && !consumableComponent.onConsumeEffects().isEmpty()) {
+				for (ConsumeEffect onConsumeEffect : consumableComponent.onConsumeEffects()) {
+					onConsumeEffect.apply(user.level(), ItemStack.EMPTY, user);
 				}
 			}
 			//# else
-			//- hungerManager.eat(foodComponent.getNutrition(), foodComponent.getSaturationModifier());
-			//- for (Pair<MobEffectInstance, Float> effect : foodComponent.getEffects()) {
-			//- 	if (random.nextFloat() < effect.getSecond()) {
-			//- 		user.addEffect(effect.getFirst());
+			//- RandomSource random = user.getRandom();
+			//- for (FoodProperties.PossibleEffect effect : foodComponent.effects()) {
+			//- 	if (random.nextFloat() < effect.probability()) {
+			//- 		user.addEffect(effect.effect());
 			//- 	}
+			//- }
+			//# end
+			//# else
+			//- hungerManager.eat(foodComponent.getNutrition(), foodComponent.getSaturationModifier());
+			//- RandomSource random = user.getRandom();
+			//- for (Pair<MobEffectInstance, Float> effect : foodComponent.getEffects()) {
+				//- if (random.nextFloat() < effect.getSecond()) {
+					//- user.addEffect(effect.getFirst());
+				//- }
 			//- }
 			//# end
 			FoodEvents.EATEN.emit(new EatenEvent(foodHandler.createContext()));

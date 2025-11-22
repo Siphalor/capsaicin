@@ -3,6 +3,7 @@ package de.siphalor.capsaicin.api.food;
 import de.siphalor.capsaicin.impl.food.FoodHandler;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.Consumable;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
@@ -54,6 +55,14 @@ public interface DynamicFoodPropertiesAccess {
 	 */
 	@Nullable net.minecraft.world.food.FoodProperties getStackOriginalFoodComponent();
 
+	//# if MC_VERSION_NUMBER >= 12102
+	/**
+	 * Gets the basic, unmodified consumable component.
+	 * @return the consumable component
+	 */
+	@Nullable Consumable getStackOriginalConsumableComponent();
+	//# end
+
 	/**
 	 * Returns whether the instance is ready to be used.
 	 * Either a stack or a block state must be set.<br />
@@ -69,6 +78,13 @@ public interface DynamicFoodPropertiesAccess {
 	 * @see #isReady()
 	 */
 	@Nullable net.minecraft.world.food.FoodProperties getModifiedFoodComponent();
+
+	//# if MC_VERSION_NUMBER >= 12102
+	/**
+	 * Gets the modified consumable component or <code>null</code> if the instance is not ready.
+	 * @return the consumable component
+	*/
+	@Nullable Consumable getModifiedConsumableComponent();
 
 	//# if MC_VERSION_NUMBER < 12005
 	//- /**

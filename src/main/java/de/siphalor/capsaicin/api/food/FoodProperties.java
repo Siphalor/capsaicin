@@ -3,14 +3,15 @@ package de.siphalor.capsaicin.api.food;
 //- import com.mojang.datafixers.util.Pair;
 import de.siphalor.capsaicin.impl.food.properties.FoodPropertiesImpl;
 //- import net.minecraft.world.effect.MobEffectInstance;
+//- import net.minecraft.world.item.consume_effects.ConsumeEffect;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
+//- import java.util.List;
 
 /**
  * Custom editable collection of food related properties.<br />
- * This class when then project used Yarn mappings.
+ * This class was created when then project still used Yarn mappings.
  * The naming conflict with {@link net.minecraft.world.food.FoodProperties} is unintentional.
  * For the time being, you'll have to use the fully qualified name for either of these classes.
  */
@@ -39,20 +40,6 @@ public interface FoodProperties {
 	 */
 	void setSaturationModifier(float saturationModifier);
 
-	//# if MC_VERSION_NUMBER >= 12005
-	/**
-	 * Gets the time in seconds it takes to eat one unit of food.
-	 * @return the time in seconds
-	 */
-	float getEatingTimeInSeconds();
-
-	/**
-	 * Sets the time in seconds it takes to eat one unit of food.
-	 * @param eatingTimeInSeconds the new time in seconds
-	 */
-	void setEatingTimeInSeconds(float eatingTimeInSeconds);
-	//# end
-
 	/**
 	 * Gets whether the item is always edible.
 	 * @return whether the item is always edible
@@ -65,25 +52,31 @@ public interface FoodProperties {
 	 */
 	void setAlwaysEdible(boolean alwaysEdible);
 
-	/**
-	 * Gets the list of status effects applied when consuming the stack.
-	 * @return the list of status effects, may be mutated
-	 */
-	//# if MC_VERSION_NUMBER >= 12005
-	@NotNull List<net.minecraft.world.food.FoodProperties.PossibleEffect> getStatusEffects();
-	//# else
+	//# if MC_VERSION_NUMBER < 12102
+	//- /**
+	//-  * Gets the list of status effects applied when consuming the stack.
+	//-  * @return the list of status effects, may be mutated
+	//-  */
+	//- //# if MC_VERSION_NUMBER >= 12102
+	//- @NotNull List<ConsumeEffect> getStatusEffects();
+	//- //# elif MC_VERSION_NUMBER >= 12005
+	//- @NotNull List<net.minecraft.world.food.FoodProperties.PossibleEffect> getStatusEffects();
+	//- //# else
 	//- @NotNull List<Pair<MobEffectInstance, Float>> getStatusEffects();
-	//# end
+	//- //# end
 
-	/**
-	 * Sets the list of status effects applied when consuming the stack.
-	 * @apiNote The list must be mutable.
-	 * @param statusEffects the new, mutable list of status effects
-	 */
-	//# if MC_VERSION_NUMBER >= 12005
-	void setStatusEffects(@NotNull List<net.minecraft.world.food.FoodProperties.PossibleEffect> statusEffects);
-	//# else
+	//- /**
+	//-  * Sets the list of status effects applied when consuming the stack.
+	//-  * @apiNote The list must be mutable.
+	//-  * @param statusEffects the new, mutable list of status effects
+	//-  */
+	//- //# if MC_VERSION_NUMBER >= 12102
+	//- void setStatusEffects(@NotNull List<ConsumeEffect> statusEffects);
+	//- //# elif MC_VERSION_NUMBER >= 12005
+	//- void setStatusEffects(@NotNull List<net.minecraft.world.food.FoodProperties.PossibleEffect> statusEffects);
+	//- //# else
 	//- void setStatusEffects(@NotNull List<Pair<MobEffectInstance, Float>> statusEffects);
+	//- //# end
 	//# end
 
 	/**

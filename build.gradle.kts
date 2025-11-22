@@ -143,7 +143,7 @@ tasks.compileJava {
 	dependsOn(jcyo)
 }
 tasks.named("compileTestmodJava") {
-	dependsOn(jcyo)
+	dependsOn(testmodJcyo)
 }
 
 tasks.jar {

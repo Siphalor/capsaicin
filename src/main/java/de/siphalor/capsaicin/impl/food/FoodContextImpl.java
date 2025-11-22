@@ -13,9 +13,6 @@ public record FoodContextImpl(
 		@Nullable BlockState blockState,
 		int originalFoodHunger,
 		float originalFoodSaturationModifier,
-		//# if MC_VERSION_NUMBER >= 12005
-		float originalEatingTimeInSeconds,
-		//# end
 		@Nullable LivingEntity user
 ) implements FoodContext {
 

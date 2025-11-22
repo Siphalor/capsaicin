@@ -8,6 +8,7 @@ import de.siphalor.capsaicin.impl.util.IItemStack;
 import net.minecraft.core.component.DataComponentType;
 //- import net.minecraft.world.food.FoodProperties;
 //- import net.minecraft.world.item.Item;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -23,15 +24,19 @@ public class MixinFoodHelper {
 			value = "INVOKE",
 			target = "Lnet/minecraft/world/item/ItemStack;getOrDefault(Lnet/minecraft/core/component/DataComponentType;Ljava/lang/Object;)Ljava/lang/Object;"
 	))
-	private static Object getFoodComponent(
+	private static <T> T getFoodComponent(
 			ItemStack stack,
-			DataComponentType<Object> componentType,
-			Object defaultValue,
-			Operation<Object> original
+			DataComponentType<T> componentType,
+			T defaultValue,
+			Operation<T> original
 	) {
 		//noinspection ConstantValue
 		if ((Object) stack instanceof IItemStack iStack) {
-			return iStack.capsaicin$getVanillaFoodComponent();
+			if (componentType == DataComponents.FOOD) {
+				//noinspection unchecked
+				return (T) iStack.capsaicin$getVanillaFoodComponent();
+			}
+			// Here we would also redirect consumable data for effects when AppleSkin comes around to allow modifying it
 		}
 		return original.call(stack, componentType, defaultValue);
 	}

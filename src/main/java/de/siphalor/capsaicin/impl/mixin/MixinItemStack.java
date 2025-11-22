@@ -5,6 +5,7 @@ import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.Consumable;
 import org.jetbrains.annotations.ApiStatus;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -22,5 +23,11 @@ public abstract class MixinItemStack /*# if MC_VERSION_NUMBER >= 12005 */impleme
 		return getComponents().get(DataComponents.FOOD);
 	}
 
+	//# if MC_VERSION_NUMBER >= 12102
+	@Override
+	public Consumable capsaicin$getVanillaConsumableComponent() {
+		return getComponents().get(DataComponents.CONSUMABLE);
+	}
+	//# end
 	//# end
 }
