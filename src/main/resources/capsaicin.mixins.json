@@ -11,7 +11,7 @@
 		"MixinItem",
 		"MixinItemStack",
 		"MixinLivingEntity",
-		"MixinPlayerEntity"
+		"MixinEatingEntities"
 		${extraCommonMixins}
 	],
 	"client": [

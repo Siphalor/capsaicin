@@ -48,7 +48,7 @@ public class CapsaicinTestmod implements ModInitializer {
 			//# end
 			}
 			return foodProperties;
-		}, new ResourceLocation("capsaicin-testmod", "test"));
+		}, createId("test"));
 
 		FoodEvents.EATEN.on(event -> {
 			FoodContext context = event.context();
@@ -58,5 +58,13 @@ public class CapsaicinTestmod implements ModInitializer {
 				System.out.println("Ate from block: " + context.blockState());
 			}
 		});
+	}
+
+	private ResourceLocation createId(String path) {
+		//# if MC_VERSION_NUMBER >= 12100
+		return ResourceLocation.fromNamespaceAndPath("capsaicin-testmod", path);
+		//# else
+		//- return new ResourceLocation("capsaicin-testmod", path);
+		//# end
 	}
 }

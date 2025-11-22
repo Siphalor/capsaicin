@@ -64,6 +64,7 @@ public class AppleSkinPlugin implements AppleSkinApi {
 						newFoodProperties.getSaturationModifier(),
 						newFoodProperties.isAlwaysEdible(),
 						newFoodProperties.getEatingTimeInSeconds(),
+						/*# if MC_VERSION_NUMBER >= 12100 */defaultFoodValues.usingConvertsTo(),/*# end */
 						newFoodProperties.getStatusEffects()
 				);
 				//# else

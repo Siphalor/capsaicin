@@ -93,11 +93,17 @@ dependencies {
 
 tasks.processResources {
     inputs.property("version", project.version)
+	inputs.property("minecraft.version.gte", mcProps["minecraft.version.greaterThanOrEqual"])
+	inputs.property("minecraft.version.lt", mcProps["minecraft.version.lessThan"])
 	inputs.property("extraClientMixins", mcProps["mixins.extra.client"])
 	inputs.property("extraCommonMixins", mcProps["mixins.extra.common"])
 
 	filesMatching("fabric.mod.json") {
-		expand("version" to project.version)
+		expand(
+			"version" to project.version,
+			"minecraft_version_greaterThanOrEqual" to mcProps.getProperty("minecraft.version.greaterThanOrEqual"),
+			"minecraft_version_lessThan" to mcProps.getProperty("minecraft.version.lessThan")
+		)
 	}
 
 	fun formatExtraMixins(property: String?): String {

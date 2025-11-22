@@ -17,6 +17,7 @@ import org.jetbrains.annotations.Nullable;
 
 //- import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Optional;
 
 @ApiStatus.Internal
 public class FoodHandler implements DynamicFoodPropertiesAccess {
@@ -171,6 +172,7 @@ public class FoodHandler implements DynamicFoodPropertiesAccess {
 					propertiesIn.getSaturationModifier(),
 					propertiesIn.isAlwaysEdible(),
 					propertiesIn.getEatingTimeInSeconds(),
+					/*# if MC_VERSION_NUMBER >= 12100 */Optional.empty(),/*# end */
 					propertiesIn.getStatusEffects()
 			);
 			//# else
@@ -187,6 +189,9 @@ public class FoodHandler implements DynamicFoodPropertiesAccess {
 				propertiesOut.getSaturationModifier(),
 				propertiesOut.isAlwaysEdible(),
 				propertiesOut.getEatingTimeInSeconds(),
+				//# if MC_VERSION_NUMBER >= 12100
+				Optional.ofNullable(stackFoodComponent).flatMap(net.minecraft.world.food.FoodProperties::usingConvertsTo),
+				//# end
 				propertiesOut.getStatusEffects()
 		);
 		//# else
