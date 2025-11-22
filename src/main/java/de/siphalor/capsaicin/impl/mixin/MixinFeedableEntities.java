@@ -5,7 +5,11 @@ import de.siphalor.capsaicin.impl.food.FoodHandler;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.animal.Cat;
-import net.minecraft.world.entity.animal.Wolf;
+//# if MC_VERSION_NUMBER >= 12105
+import net.minecraft.world.entity.animal.wolf.Wolf;
+//# else
+//- import net.minecraft.world.entity.animal.Wolf;
+//# end
 import net.minecraft.world.entity.player.Player;
 //- import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
