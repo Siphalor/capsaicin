@@ -57,9 +57,7 @@ public interface FoodProperties {
 	//-  * Gets the list of status effects applied when consuming the stack.
 	//-  * @return the list of status effects, may be mutated
 	//-  */
-	//- //# if MC_VERSION_NUMBER >= 12102
-	//- @NotNull List<ConsumeEffect> getStatusEffects();
-	//- //# elif MC_VERSION_NUMBER >= 12005
+	//- //# if MC_VERSION_NUMBER >= 12005
 	//- @NotNull List<net.minecraft.world.food.FoodProperties.PossibleEffect> getStatusEffects();
 	//- //# else
 	//- @NotNull List<Pair<MobEffectInstance, Float>> getStatusEffects();
@@ -70,9 +68,7 @@ public interface FoodProperties {
 	//-  * @apiNote The list must be mutable.
 	//-  * @param statusEffects the new, mutable list of status effects
 	//-  */
-	//- //# if MC_VERSION_NUMBER >= 12102
-	//- void setStatusEffects(@NotNull List<ConsumeEffect> statusEffects);
-	//- //# elif MC_VERSION_NUMBER >= 12005
+	//- //# if MC_VERSION_NUMBER >= 12005
 	//- void setStatusEffects(@NotNull List<net.minecraft.world.food.FoodProperties.PossibleEffect> statusEffects);
 	//- //# else
 	//- void setStatusEffects(@NotNull List<Pair<MobEffectInstance, Float>> statusEffects);
