@@ -159,6 +159,18 @@ publishing {
 			version = shortVersion
 
 			from(components["java"])
+
+			pom {
+				name.set("Capsaicin")
+				description.set("""
+					A library mod that allows to dynamically modify food properties.
+					This artifact supports ${mcProps["minecraft.version.greaterThanOrEqual"]} (inclusive) to ${mcProps["minecraft.version.lessThan"]} (exclusive).
+				""".trimIndent())
+				url.set(project.property("git.url") as String)
+				scm {
+					url.set(project.property("git.url") as String)
+				}
+			}
 		}
 	}
 
