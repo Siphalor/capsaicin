@@ -1,48 +1,50 @@
 package de.siphalor.capsaicin.impl.mixin.client.appleskin;
 
-import de.siphalor.capsaicin.api.food.CamoFoodContext;
-import de.siphalor.capsaicin.api.food.CamoFoodItem;
-import de.siphalor.capsaicin.impl.food.CamoFoodContextImpl;
-import de.siphalor.capsaicin.impl.food.FoodHandler;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.food.FoodProperties;
-import net.minecraft.world.item.ItemStack;
-import org.jetbrains.annotations.Nullable;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
-import squeek.appleskin.helpers.DynamicFood;
+//- import de.siphalor.capsaicin.api.food.CamoFoodContext;
+//- import de.siphalor.capsaicin.api.food.CamoFoodItem;
+//- import de.siphalor.capsaicin.impl.food.CamoFoodContextImpl;
+//- import de.siphalor.capsaicin.impl.food.FoodHandler;
+//- import net.minecraft.world.entity.player.Player;
+//- import net.minecraft.world.food.FoodProperties;
+//- import net.minecraft.world.item.ItemStack;
+//- import org.jetbrains.annotations.Nullable;
+//- import org.spongepowered.asm.mixin.Mixin;
+//- import org.spongepowered.asm.mixin.Shadow;
+//- import squeek.appleskin.helpers.DynamicFood;
 
-/**
- * Sneakily implements AppleSkin's DynamicFood on CamoFoodItem, if AppleSkin is present.
- */
-@Mixin(CamoFoodItem.class)
-public interface MixinCamoFoodItem extends DynamicFood {
-	@Shadow
-	@Nullable ItemStack getCamoFoodStack(ItemStack stack, CamoFoodContext context);
+//# if MC_VERSION_NUMBER < 12005
+//- /**
+//-  * Sneakily implements AppleSkin's DynamicFood on CamoFoodItem, if AppleSkin is present.
+//-  */
+//- @Mixin(CamoFoodItem.class)
+//- public interface MixinCamoFoodItem extends DynamicFood {
+//- 	@Shadow
+//- 	@Nullable ItemStack getCamoFoodStack(ItemStack stack, CamoFoodContext context);
 
-	@Override
-	default int getDynamicHunger(ItemStack stack, Player player) {
-		@Nullable ItemStack camoFoodStack = getCamoFoodStack(stack, new CamoFoodContextImpl(player));
-		if (camoFoodStack == null) {
-			return 0;
-		}
-		@Nullable FoodProperties foodComponent = FoodHandler.INSTANCE.get().withStack(stack).withUser(player).getModifiedFoodComponent();
-		if (foodComponent == null) {
-			return 0;
-		}
-		return foodComponent.getNutrition();
-	}
+//- 	@Override
+//- 	default int getDynamicHunger(ItemStack stack, Player player) {
+//- 		@Nullable ItemStack camoFoodStack = getCamoFoodStack(stack, new CamoFoodContextImpl(player));
+//- 		if (camoFoodStack == null) {
+//- 			return 0;
+//- 		}
+//- 		@Nullable FoodProperties foodComponent = FoodHandler.INSTANCE.get().withStack(stack).withUser(player).getModifiedFoodComponent();
+//- 		if (foodComponent == null) {
+//- 			return 0;
+//- 		}
+//- 		return foodComponent.getNutrition();
+//- 	}
 
-	@Override
-	default float getDynamicSaturation(ItemStack stack, Player player) {
-		@Nullable ItemStack camoFoodStack = getCamoFoodStack(stack, new CamoFoodContextImpl(player));
-		if (camoFoodStack == null) {
-			return 0F;
-		}
-		@Nullable FoodProperties foodComponent = FoodHandler.INSTANCE.get().withStack(stack).withUser(player).getModifiedFoodComponent();
-		if (foodComponent == null) {
-			return 0F;
-		}
-		return foodComponent.getSaturationModifier();
-	}
-}
+//- 	@Override
+//- 	default float getDynamicSaturation(ItemStack stack, Player player) {
+//- 		@Nullable ItemStack camoFoodStack = getCamoFoodStack(stack, new CamoFoodContextImpl(player));
+//- 		if (camoFoodStack == null) {
+//- 			return 0F;
+//- 		}
+//- 		@Nullable FoodProperties foodComponent = FoodHandler.INSTANCE.get().withStack(stack).withUser(player).getModifiedFoodComponent();
+//- 		if (foodComponent == null) {
+//- 			return 0F;
+//- 		}
+//- 		return foodComponent.getSaturationModifier();
+//- 	}
+//- }
+//# end

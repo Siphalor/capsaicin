@@ -1,11 +1,12 @@
 package de.siphalor.capsaicin.impl.food;
 
-import com.mojang.datafixers.util.Pair;
+//- import com.mojang.datafixers.util.Pair;
 import de.siphalor.capsaicin.api.food.*;
 import de.siphalor.capsaicin.impl.food.properties.FoodPropertiesImpl;
-import de.siphalor.capsaicin.impl.util.IItem;
+//- import de.siphalor.capsaicin.impl.util.IItem;
+import de.siphalor.capsaicin.impl.util.IItemStack;
 import lombok.Getter;
-import net.minecraft.world.effect.MobEffectInstance;
+//- import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -14,14 +15,17 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
+//- import java.util.ArrayList;
+import java.util.Collections;
 
 @ApiStatus.Internal
 public class FoodHandler implements DynamicFoodPropertiesAccess {
 	public static final ThreadLocal<FoodHandler> INSTANCE = ThreadLocal.withInitial(FoodHandler::new);
 
 	private @Nullable FoodProperties foodProperties;
-	private int eatingTime;
+	//# if MC_VERSION_NUMBER < 12005
+	//- private int eatingTime;
+	//# end
 	@Getter
 	private @Nullable ItemStack stack;
 	private @Nullable net.minecraft.world.food.FoodProperties stackFoodComponent;
@@ -57,21 +61,29 @@ public class FoodHandler implements DynamicFoodPropertiesAccess {
 			}
 			item = this.stack.getItem();
 		}
-		if (item instanceof IItem iItem) {
-			stackFoodComponent = iItem.capsaicin$getVanillaFoodComponent();
+		//# if MC_VERSION_NUMBER >= 12005
+		//noinspection ConstantValue
+		if ((Object) this.stack instanceof IItemStack iStack) {
+		//# else
+		//- //noinspection ConstantValue
+		//- if ((Object) item instanceof IItem iStack) {
+		//# end
+			stackFoodComponent = iStack.capsaicin$getVanillaFoodComponent();
 			if (stackFoodComponent != null) {
 				foodProperties = FoodPropertiesImpl.from(stackFoodComponent);
 			}
 		} else {
 			stackFoodComponent = null;
 		}
-		if (item != null) {
-			// Must not call stack.getMaxUseTime() here!
-			// This would cause a stack overflow
-			eatingTime = item.getUseDuration(this.stack);
-		} else {
-			eatingTime = 0;
-		}
+		//# if MC_VERSION_NUMBER < 12005
+		//- if (item != null) {
+		//- 	// Must not call stack.getMaxUseTime() here!
+		//- 	// This would cause a stack overflow
+		//- 	eatingTime = item.getUseDuration(this.stack);
+		//- } else {
+		//- 	eatingTime = 0;
+		//- }
+		//# end
 		return this;
 	}
 
@@ -81,7 +93,9 @@ public class FoodHandler implements DynamicFoodPropertiesAccess {
 
 		this.blockState = blockState;
 		this.foodProperties = foodProperties;
-		this.eatingTime = 0;
+		//# if MC_VERSION_NUMBER < 12005
+		//- this.eatingTime = 0;
+		//# end
 		return this;
 	}
 
@@ -104,9 +118,22 @@ public class FoodHandler implements DynamicFoodPropertiesAccess {
 
 	public FoodContext createContext() {
 		if (foodProperties == null) {
-			return new FoodContextImpl(stack, blockState, 0, 0, user);
+			//# if MC_VERSION_NUMBER >= 12005
+			return new FoodContextImpl(stack, blockState, 0, 0, 0, user);
+			//# else
+			//- return new FoodContextImpl(stack, blockState, 0, 0, user);
+			//# end
 		}
-		return new FoodContextImpl(stack, blockState, foodProperties.getHunger(), foodProperties.getSaturationModifier(), user);
+		return new FoodContextImpl(
+				stack,
+				blockState,
+				foodProperties.getHunger(),
+				foodProperties.getSaturationModifier(),
+				//# if MC_VERSION_NUMBER >= 12005
+				foodProperties.getEatingTimeInSeconds(),
+				//# end
+				user
+		);
 	}
 
 	@Override
@@ -117,50 +144,84 @@ public class FoodHandler implements DynamicFoodPropertiesAccess {
 
 		@NotNull FoodProperties propertiesIn;
 		if (foodProperties == null) {
-			propertiesIn = new FoodPropertiesImpl(0, 0F, false, new ArrayList<>());
+			//# if MC_VERSION_NUMBER >= 12005
+			propertiesIn = new FoodPropertiesImpl(0, 0F, 0F, false, Collections.emptyList());
+			//# else
+			//- propertiesIn = new FoodPropertiesImpl(0, 0F, false, new ArrayList<>());
+			//# end
 		} else {
-			propertiesIn = new FoodPropertiesImpl(foodProperties.getHunger(), foodProperties.getSaturationModifier(), false, foodProperties.getStatusEffects());
+			propertiesIn = new FoodPropertiesImpl(
+					foodProperties.getHunger(),
+					foodProperties.getSaturationModifier(),
+					//# if MC_VERSION_NUMBER >= 12005
+					foodProperties.getEatingTimeInSeconds(),
+					//# end
+					false,
+					foodProperties.getStatusEffects()
+			);
 		}
 		@NotNull FoodProperties propertiesOut = getFoodProperties(propertiesIn);
 		if (propertiesOut == propertiesIn && !propertiesIn.isChanged()) {
 			if (stackFoodComponent != null) {
 				return stackFoodComponent;
 			}
-			return new net.minecraft.world.food.FoodProperties.Builder()
-					.nutrition(propertiesIn.getHunger())
-					.saturationMod(propertiesIn.getSaturationModifier())
-					.build();
+			//# if MC_VERSION_NUMBER >= 12005
+			return new net.minecraft.world.food.FoodProperties(
+					propertiesIn.getHunger(),
+					propertiesIn.getSaturationModifier(),
+					propertiesIn.isAlwaysEdible(),
+					propertiesIn.getEatingTimeInSeconds(),
+					propertiesIn.getStatusEffects()
+			);
+			//# else
+			//- return new net.minecraft.world.food.FoodProperties.Builder()
+			//- 		.nutrition(propertiesIn.getHunger())
+			//- 		.saturationMod(propertiesIn.getSaturationModifier())
+			//- 		.build();
+			//# end
 		}
 
-		@NotNull net.minecraft.world.food.FoodProperties.Builder builder = new net.minecraft.world.food.FoodProperties.Builder()
-				.nutrition(propertiesOut.getHunger())
-				.saturationMod(propertiesOut.getSaturationModifier());
-		if (propertiesOut.isAlwaysEdible()) {
-			builder.alwaysEat();
-		}
-		for (Pair<MobEffectInstance, Float> statusEffect : propertiesOut.getStatusEffects()) {
-			builder.effect(statusEffect.getFirst(), statusEffect.getSecond());
-		}
-		if (stackFoodComponent != null) {
-			if (stackFoodComponent.isFastFood()) {
-				builder.fast();
-			}
-			if (stackFoodComponent.isMeat()) {
-				builder.meat();
-			}
-		}
-		return builder.build();
+		//# if MC_VERSION_NUMBER >= 12005
+		return new net.minecraft.world.food.FoodProperties(
+				propertiesOut.getHunger(),
+				propertiesOut.getSaturationModifier(),
+				propertiesOut.isAlwaysEdible(),
+				propertiesOut.getEatingTimeInSeconds(),
+				propertiesOut.getStatusEffects()
+		);
+		//# else
+		//- @NotNull net.minecraft.world.food.FoodProperties.Builder builder = new net.minecraft.world.food.FoodProperties.Builder()
+		//- 		.nutrition(propertiesOut.getHunger())
+		//- 		.saturationMod(propertiesOut.getSaturationModifier());
+		//- if (propertiesOut.isAlwaysEdible()) {
+		//- 	builder.alwaysEat();
+		//- }
+		//- for (Pair<MobEffectInstance, Float> statusEffect : propertiesOut.getStatusEffects()) {
+		//- 	builder.effect(statusEffect.getFirst(), statusEffect.getSecond());
+		//- }
+		//- if (stackFoodComponent != null) {
+		//- 	if (stackFoodComponent.isFastFood()) {
+		//- 		builder.fast();
+		//- 	}
+		//- 	if (stackFoodComponent.isMeat()) {
+		//- 		builder.meat();
+		//- 	}
+		//- }
+		//- return builder.build();
+		//# end
 	}
 
 	protected @NotNull FoodProperties getFoodProperties(@NotNull FoodProperties foodProperties) {
 		return FoodModifications.PROPERTIES_MODIFIERS.apply(foodProperties, createContext());
 	}
 
-	@Override
-	public int getModifiedEatingTime() {
-		if (!isReady()) {
-			return 0;
-		}
-		return FoodModifications.EATING_TIME_MODIFIERS.apply(eatingTime, createContext());
-	}
+	//# if MC_VERSION_NUMBER < 12005
+	//- @Override
+	//- public int getModifiedEatingTime() {
+	//- 	if (!isReady()) {
+	//- 		return 0;
+	//- 	}
+	//- 	return FoodModifications.EATING_TIME_MODIFIERS.apply(eatingTime, createContext());
+	//- }
+	//# end
 }

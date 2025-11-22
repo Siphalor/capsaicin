@@ -70,10 +70,12 @@ public interface DynamicFoodPropertiesAccess {
 	 */
 	@Nullable net.minecraft.world.food.FoodProperties getModifiedFoodComponent();
 
-	/**
-	 * Gets the modified eating time or <code>0</code> if the instance is not ready.
-	 * @return the eating time
-	 * @see #isReady()
-	 */
-	int getModifiedEatingTime();
+	//# if MC_VERSION_NUMBER < 12005
+	//- /**
+	//-  * Gets the modified eating time or <code>0</code> if the instance is not ready.
+	//-  * @return the eating time
+	//-  * @see #isReady()
+	//-  */
+	//- int getModifiedEatingTime();
+	//# end
 }

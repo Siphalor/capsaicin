@@ -2,7 +2,7 @@
 fabric-loader = "0.17.2"
 jcyo = "0.5.1"
 lombok = "1.18.38"
-loom = "1.12-SNAPSHOT"
+loom = "1.13-SNAPSHOT"
 modPublisher = "2.1.8"
 
 [plugins]

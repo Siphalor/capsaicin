@@ -1,10 +1,11 @@
 package de.siphalor.capsaicin.impl.food.properties;
 
-import com.mojang.datafixers.util.Pair;
+//- import com.mojang.datafixers.util.Pair;
 import de.siphalor.capsaicin.api.food.FoodProperties;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import net.minecraft.world.effect.MobEffectInstance;
+//- import lombok.RequiredArgsConstructor;
+//- import net.minecraft.world.effect.MobEffectInstance;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
@@ -19,23 +20,54 @@ public class FoodPropertiesImpl implements FoodProperties {
 	private boolean changed;
 	private int hunger;
 	private float saturationModifier;
+	//# if MC_VERSION_NUMBER >= 12005
+	private float eatingTimeInSeconds;
+	//# end
 	private boolean alwaysEdible;
-	private @NotNull List<Pair<MobEffectInstance, Float>> statusEffects;
+	//# if MC_VERSION_NUMBER >= 12005
+	private @NotNull List<net.minecraft.world.food.FoodProperties.PossibleEffect> statusEffects;
+	//# else
+	//- private @NotNull List<Pair<MobEffectInstance, Float>> statusEffects;
+	//# end
 
 	public static FoodPropertiesImpl from(@NotNull net.minecraft.world.food.FoodProperties foodComponent) {
+		//# if MC_VERSION_NUMBER >= 12005
 		return new FoodPropertiesImpl(
-				foodComponent.getNutrition(),
-				foodComponent.getSaturationModifier(),
+				foodComponent.nutrition(),
+				foodComponent.saturation(),
+				foodComponent.eatSeconds(),
 				foodComponent.canAlwaysEat(),
-				new ArrayList<>(foodComponent.getEffects())
+				foodComponent.effects()
 		);
+		//# else
+		//- return new FoodPropertiesImpl(
+		//- 		foodComponent.getNutrition(),
+		//- 		foodComponent.getSaturationModifier(),
+		//- 		foodComponent.canAlwaysEat(),
+		//- 		new ArrayList<>(foodComponent.getEffects())
+		//- );
+		//# end
 	}
 
-	public FoodPropertiesImpl(int hunger, float saturationModifier, boolean alwaysEdible, @NotNull List<Pair<MobEffectInstance, Float>> statusEffects) {
+	public FoodPropertiesImpl(
+			int hunger,
+			float saturationModifier,
+			//# if MC_VERSION_NUMBER >= 12005
+			float eatingTimeInSeconds,
+			boolean alwaysEdible,
+			@NotNull List<net.minecraft.world.food.FoodProperties.PossibleEffect> statusEffects
+			//# else
+			//- boolean alwaysEdible,
+			//- @NotNull List<Pair<MobEffectInstance, Float>> statusEffects
+			//# end
+	) {
 		this.hunger = hunger;
 		this.saturationModifier = saturationModifier;
+		//# if MC_VERSION_NUMBER >= 12005
+		this.eatingTimeInSeconds = eatingTimeInSeconds;
+		//# end
 		this.alwaysEdible = alwaysEdible;
-		this.statusEffects = new ReactiveList<>(statusEffects);
+		this.statusEffects = new ReactiveList<>(new ArrayList<>(statusEffects));
 	}
 
 	@Override
@@ -54,6 +86,16 @@ public class FoodPropertiesImpl implements FoodProperties {
 		}
 	}
 
+	//# if MC_VERSION_NUMBER >= 12005
+	@Override
+	public void setEatingTimeInSeconds(float eatingTimeInSeconds) {
+		if (this.eatingTimeInSeconds != eatingTimeInSeconds) {
+			this.eatingTimeInSeconds = eatingTimeInSeconds;
+			changed = true;
+		}
+	}
+	//# end
+
 	@Override
 	public void setAlwaysEdible(boolean alwaysEdible) {
 		if (this.alwaysEdible != alwaysEdible) {
@@ -63,7 +105,11 @@ public class FoodPropertiesImpl implements FoodProperties {
 	}
 
 	@Override
-	public void setStatusEffects(@NotNull List<Pair<MobEffectInstance, Float>> statusEffects) {
+	//# if MC_VERSION_NUMBER >= 12005
+	public void setStatusEffects(@NotNull List<net.minecraft.world.food.FoodProperties.PossibleEffect> statusEffects) {
+	//# else
+	//- public void setStatusEffects(@NotNull List<Pair<MobEffectInstance, Float>> statusEffects) {
+	//# end
 		if (this.statusEffects != statusEffects) {
 			this.statusEffects = statusEffects;
 			changed = true;

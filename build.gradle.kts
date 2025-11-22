@@ -39,6 +39,10 @@ repositories {
 		name = "TerraformersMC"
 		url = uri("https://maven.terraformersmc.com/releases")
 	}
+	maven {
+		name = "ParchmentMC"
+		url = uri("https://maven.parchmentmc.org")
+	}
 }
 
 val testmod: SourceSet by sourceSets.creating {
@@ -89,9 +93,23 @@ dependencies {
 
 tasks.processResources {
     inputs.property("version", project.version)
+	inputs.property("extraClientMixins", mcProps["mixins.extra.client"])
+	inputs.property("extraCommonMixins", mcProps["mixins.extra.common"])
 
 	filesMatching("fabric.mod.json") {
 		expand("version" to project.version)
+	}
+
+	fun formatExtraMixins(property: String?): String {
+		val mixins = property?.split(",")?.map { it.trim() } ?: listOf()
+		if (mixins.isEmpty()) return ""
+		return "," + mixins.joinToString(",") { "\"$it\"" }
+	}
+	filesMatching("capsaicin.mixins.json") {
+		expand(
+			"extraClientMixins" to formatExtraMixins(mcProps.getProperty("mixins.extra.client")),
+			"extraCommonMixins" to formatExtraMixins(mcProps.getProperty("mixins.extra.common"))
+		)
 	}
 }
 
@@ -113,6 +131,13 @@ val jcyo = tasks.register<JcyoTask>("jcyo") {
 val testmodJcyo = tasks.register<JcyoTask>("testmodJcyo") {
 	inputDirectory = file("src/testmod/java")
 	variables = jcyoVars
+}
+
+tasks.compileJava {
+	dependsOn(jcyo)
+}
+tasks.named("compileTestmodJava") {
+	dependsOn(jcyo)
 }
 
 tasks.jar {
