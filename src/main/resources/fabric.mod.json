@@ -29,11 +29,6 @@
 		"minecraft": [
 			"<${minecraft_version_greaterThanOrEqual}",
 			">=${minecraft_version_lessThan}"
-		],
-		"polymer": "<0.6.0",
-		"polymer-core": [
-			"<0.7.0",
-			">=0.8"
 		]
 	},
 	"custom": {
