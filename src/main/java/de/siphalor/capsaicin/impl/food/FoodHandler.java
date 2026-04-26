@@ -22,7 +22,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collections;
 
 //- import java.util.ArrayList;
-import java.util.Collections;
 //- import java.util.Optional;
 
 @ApiStatus.Internal
@@ -81,6 +80,8 @@ public class FoodHandler implements DynamicFoodPropertiesAccess {
 			}
 			item = this.stack.getItem();
 		}
+
+		foodProperties = null;
 		//# if MC_VERSION_NUMBER >= 12005
 		//noinspection ConstantValue
 		if ((Object) this.stack instanceof IItemStack iStack) {

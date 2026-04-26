@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Fixed obsolete static Polymer version restrictions
+- Fixed food properties being carried over to incorrect stacks under certain circumstances
 
 ## [1.4.0] - 2025-11-22
 
