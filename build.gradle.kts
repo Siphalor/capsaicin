@@ -107,7 +107,7 @@ tasks.processResources {
 	}
 
 	fun formatExtraMixins(property: String?): String {
-		val mixins = property?.split(",")?.map { it.trim() } ?: listOf()
+		val mixins = if (property.isNullOrEmpty()) { listOf() } else { property.split(",").map { it.trim() } }
 		if (mixins.isEmpty()) return ""
 		return "," + mixins.joinToString(",") { "\"$it\"" }
 	}
