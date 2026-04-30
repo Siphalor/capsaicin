@@ -21,6 +21,8 @@ This library mod provides hooks to dynamically modify properties of food items a
 
 ## Usage
 
+### Setup
+
 ```groovy
 repositories {
 	// ...other maven repositories
@@ -35,6 +37,19 @@ dependencies {
 }
 
 ```
+
+A brief overview of the supported Minecraft versions and corresponding artifact ids:
+
+| Minecraft Version | Artifact Id           |
+|-------------------|-----------------------|
+| 1.20–1.20.3       | `capsaicin-mc1.20.4`  |
+| 1.20.4            | _Unsupported_         |
+| 1.21–1.21.1       | `capsaicin-mc1.21.1`  |
+| 1.21.2–1.21.4     | `capsaicin-mc1.21.3`  |
+| 1.21.5–1.21.8     | `capsaicin-mc1.21.5`  |
+| 1.21.9–1.21.11    | `capsaicin-mc1.21.10` |
+
+### API
 
 The [testmod](src/testmod/java/de/siphalor/capsaicin/testmod/CapsaicinTestmod.java) show some examples of how you might use the API.
 
