@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"id": "capsaicin",
-	"version": "${version}",
+	"version": "0.0.0",
 	"name": "Capsaicin",
 	"description": "A library mod for dynamically modifying food data",
 	"authors": [
@@ -24,12 +24,6 @@
 	],
 	"depends": {
 		"fabricloader": ">=0.14.12"
-	},
-	"breaks": {
-		"minecraft": [
-			"<${minecraft_version_greaterThanOrEqual}",
-			">=${minecraft_version_lessThan}"
-		]
 	},
 	"custom": {
 		"modmenu:api": true,

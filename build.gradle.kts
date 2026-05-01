@@ -1,19 +1,16 @@
 import de.siphalor.jcyo.gradle.JcyoTask
-import java.util.*
+import de.siphalor.minecraft_modding_toolkit.gradle.project_plugin.filter.JsonMergeFilterReader
 
 plugins {
-	alias(libs.plugins.loom)
 	`java-library`
 	`maven-publish`
+	alias(mcLibs.plugins.smcmtk)
+	alias(mcLibs.plugins.fabric.loom)
 	alias(libs.plugins.jcyo)
 	alias(libs.plugins.modPublisher)
 }
 
 val minecraftVersionDescriptor = project.properties["minecraft.version.descriptor"] as String
-val mcProps = Properties().apply {
-	val propFile = project.layout.settingsDirectory.file("gradle/mc-${minecraftVersionDescriptor}/gradle.properties")
-	load(propFile.asFile.inputStream())
-}
 
 group = "de.siphalor.${project.name}"
 val archivesBaseName = "${project.name}-mc${minecraftVersionDescriptor}"
@@ -60,6 +57,11 @@ loom {
 	}
 }
 
+smcmtk {
+	useMojangMappings()
+	createModConfigurations(listOf(sourceSets.main.get(), testmod))
+}
+
 dependencies {
 	annotationProcessor(libs.lombok)
 	compileOnly(libs.lombok)
@@ -67,25 +69,21 @@ dependencies {
 	testCompileOnly(libs.lombok)
 
 	minecraft(mcLibs.minecraft)
-	mappings(loom.layered {
-		officialMojangMappings()
-		parchment("org.parchmentmc.data:parchment-${mcLibs.versions.minecraft.get()}:${mcLibs.versions.parchment.get()}@zip")
-	})
-	modImplementation(libs.fabric.loader)
+	"modImplementation"(libs.fabric.loader)
 
 	// AppleSkin
-	modCompileOnly(mcLibs.appleskin)
-	modLocalRuntime(mcLibs.appleskin) {
+	"modCompileOnly"(mcLibs.appleskin)
+	"modLocalRuntime"(mcLibs.appleskin) {
 		exclude(module = "modmenu")
 	}
 
 	// Transitive
-	modLocalRuntime(mcLibs.cloth.config)
-	modCompileOnly(mcLibs.fabric.api)
-	modLocalRuntime(mcLibs.fabric.api)
+	"modLocalRuntime"(mcLibs.cloth.config)
+	"modCompileOnly"(mcLibs.fabric.api)
+	"modLocalRuntime"(mcLibs.fabric.api)
 
 	// Polymer
-	modCompileOnly(mcLibs.polymer)
+	"modCompileOnly"(mcLibs.polymer)
 
 	// Testmod stuff
 	"testmodImplementation"(sourceSets.main.map { it.output })
@@ -93,29 +91,26 @@ dependencies {
 
 tasks.processResources {
     inputs.property("version", project.version)
-	inputs.property("minecraft.version.gte", mcProps["minecraft.version.greaterThanOrEqual"])
-	inputs.property("minecraft.version.lt", mcProps["minecraft.version.lessThan"])
-	inputs.property("extraClientMixins", mcProps["mixins.extra.client"])
-	inputs.property("extraCommonMixins", mcProps["mixins.extra.common"])
+	inputs.property("minecraft.version.gte", smcmtk.mcProps.getting("minecraft.version.greaterThanOrEqual"))
+	inputs.property("minecraft.version.lt", smcmtk.mcProps.getting("minecraft.version.lessThan"))
+	inputs.property("extraClientMixins", smcmtk.mcProps.getting("mixins.extra.client"))
+	inputs.property("extraCommonMixins", smcmtk.mcProps.getting("mixins.extra.common"))
 
 	filesMatching("fabric.mod.json") {
-		expand(
+		filter<JsonMergeFilterReader>(mapOf("merge" to mapOf(
 			"version" to project.version,
-			"minecraft_version_greaterThanOrEqual" to mcProps.getProperty("minecraft.version.greaterThanOrEqual"),
-			"minecraft_version_lessThan" to mcProps.getProperty("minecraft.version.lessThan")
-		)
+			"breaks" to mapOf("minecraft" to listOf(
+				smcmtk.mcProps.getting("minecraft.version.greaterThanOrEqual").get(),
+				smcmtk.mcProps.getting("minecraft.version.lessThan").get()
+			))
+		)))
 	}
 
-	fun formatExtraMixins(property: String?): String {
-		val mixins = if (property.isNullOrEmpty()) { listOf() } else { property.split(",").map { it.trim() } }
-		if (mixins.isEmpty()) return ""
-		return "," + mixins.joinToString(",") { "\"$it\"" }
-	}
 	filesMatching("capsaicin.mixins.json") {
-		expand(
-			"extraClientMixins" to formatExtraMixins(mcProps.getProperty("mixins.extra.client")),
-			"extraCommonMixins" to formatExtraMixins(mcProps.getProperty("mixins.extra.common"))
-		)
+		filter<JsonMergeFilterReader>(mapOf("merge" to mapOf(
+			"client" to smcmtk.mcProps.getting("mixins.extra.client").get(),
+			"mixins" to smcmtk.mcProps.getting("mixins.extra.common").get()
+		)))
 	}
 }
 
@@ -125,11 +120,9 @@ java {
 
 	withSourcesJar()
 }
-
-val jcyoVars = mcProps.stringPropertyNames()
-	.filter { it.startsWith("preprocessor.") }
-	.map { it to mcProps[it] }
-	.associate { (key, value) -> key.substring("preprocessor.".length) to value.toString() }
+val jcyoVars = smcmtk.mcProps.map {
+	it.filterKeys { key -> key.startsWith("preprocessor.") }.mapKeys { (key, _) -> key.substring("preprocessor.".length) }
+}
 val jcyo = tasks.register<JcyoTask>("jcyo") {
 	inputDirectory = file("src/main/java")
 	variables = jcyoVars
@@ -164,7 +157,9 @@ publishing {
 				name.set("Capsaicin")
 				description.set("""
 					A library mod that allows to dynamically modify food properties.
-					This artifact supports ${mcProps["minecraft.version.greaterThanOrEqual"]} (inclusive) to ${mcProps["minecraft.version.lessThan"]} (exclusive).
+					This artifact supports \
+					${smcmtk.mcProps.getting("minecraft.version.greaterThanOrEqual").get()} (inclusive) to \
+					${smcmtk.mcProps.getting("minecraft.version.lessThan")} (exclusive).
 				""".trimIndent())
 				url.set(project.property("git.url") as String)
 				scm {

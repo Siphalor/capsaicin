@@ -13,10 +13,3 @@ cloth-config = { group = "me.shedaniel.cloth", name = "cloth-config-fabric", ver
 fabric-api = { group = "net.fabricmc.fabric-api", name = "fabric-api", version.ref = "fabric-api" }
 minecraft = { group = "com.mojang", name = "minecraft", version.ref = "minecraft" }
 polymer = { group = "eu.pb4", name = "polymer-core", version.ref = "polymer" }
-
-[bundles]
-transitive = [
-	"cloth-config",
-	"fabric-api"
-]
-

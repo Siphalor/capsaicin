@@ -2,7 +2,7 @@
 cloth-config = "16.0.143"
 appleskin = "mc1.21.3-3.0.6"
 fabric-api = "0.114.1+1.21.3"
-java = "17"
+java = "21"
 minecraft = "1.21.3"
 parchment = "2024.12.07"
 polymer = "0.10.2+1.21.3"
@@ -13,10 +13,3 @@ cloth-config = { group = "me.shedaniel.cloth", name = "cloth-config-fabric", ver
 fabric-api = { group = "net.fabricmc.fabric-api", name = "fabric-api", version.ref = "fabric-api" }
 minecraft = { group = "com.mojang", name = "minecraft", version.ref = "minecraft" }
 polymer = { group = "eu.pb4", name = "polymer-core", version.ref = "polymer" }
-
-[bundles]
-transitive = [
-	"cloth-config",
-	"fabric-api"
-]
-

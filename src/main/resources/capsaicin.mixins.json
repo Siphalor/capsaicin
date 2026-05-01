@@ -12,11 +12,9 @@
 		"MixinItemStack",
 		"MixinLivingEntity",
 		"MixinEatingEntities"
-		${extraCommonMixins}
 	],
 	"client": [
 		"client.appleskin.MixinFoodHelper"
-		${extraClientMixins}
 	],
 	"injectors": {
 		"defaultRequire": 1
