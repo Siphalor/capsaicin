@@ -1,6 +1,7 @@
 package de.siphalor.capsaicin.api.modifier;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
+//- import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
 public interface Modifiers<Value, Context> {
@@ -14,7 +15,15 @@ public interface Modifiers<Value, Context> {
 	 * @param id The unique id of this modifier
 	 * @param priority The priority of this modifier, lower means earlier and higher means later
 	 */
-	void register(@NotNull Modifier<Value, Context> modifier, @NotNull ResourceLocation id, int priority);
+	void register(
+			@NotNull Modifier<Value, Context> modifier,
+			//# if MC_VERSION_NUMBER >= 12111
+			@NotNull Identifier id,
+			//# else
+			//- @NotNull ResourceLocation id,
+			//# end
+			int priority
+	);
 	/**
 	 * Registers a new modifier with the given unique id and default priority (0). <br />
 	 * Ordering of the modifiers is performed by their priorities (lower=earlier)
@@ -24,7 +33,14 @@ public interface Modifiers<Value, Context> {
 	 * @param modifier The modifier
 	 * @param id The unique id of this modifier
 	 */
-	default void register(@NotNull Modifier<Value, Context> modifier, @NotNull ResourceLocation id) {
+	default void register(
+			@NotNull Modifier<Value, Context> modifier,
+			//# if MC_VERSION_NUMBER >= 12111
+			@NotNull Identifier id
+			//# else
+			//- @NotNull ResourceLocation id
+			//# end
+	) {
 		register(modifier, id, 0);
 	}
 

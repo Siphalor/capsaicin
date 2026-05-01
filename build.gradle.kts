@@ -101,16 +101,24 @@ tasks.processResources {
 			"version" to project.version,
 			"breaks" to mapOf("minecraft" to listOf(
 				smcmtk.mcProps.getting("minecraft.version.greaterThanOrEqual").get(),
-				smcmtk.mcProps.getting("minecraft.version.lessThan").get()
-			))
+				smcmtk.mcProps.getting("minecraft.version.lessThan").get(),
+			)),
 		)))
 	}
 
 	filesMatching("capsaicin.mixins.json") {
 		filter<JsonMergeFilterReader>(mapOf("merge" to mapOf(
-			"client" to smcmtk.mcProps.getting("mixins.extra.client").get(),
-			"mixins" to smcmtk.mcProps.getting("mixins.extra.common").get()
+			"client" to smcmtk.mcProps.getting("mixins.extra.client").map { it.split(", ") }.get(),
+			"mixins" to smcmtk.mcProps.getting("mixins.extra.common").map { it.split(", ") }.get(),
 		)))
+	}
+}
+
+tasks.named<ProcessResources>("processTestmodResources") {
+	inputs.property("version", project.version)
+
+	filesMatching("fabric.mod.json") {
+		filter<JsonMergeFilterReader>(mapOf("merge" to mapOf("version" to project.version)))
 	}
 }
 

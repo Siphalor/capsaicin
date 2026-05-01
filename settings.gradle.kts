@@ -30,7 +30,7 @@ plugins {
 }
 
 smcmtk {
-	fabricLoomVersion = "1.15-SNAPSHOT"
+	fabricLoomVersion = "1.16-SNAPSHOT"
 }
 
 rootProject.name = "capsaicin"

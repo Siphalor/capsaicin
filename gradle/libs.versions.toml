@@ -1,13 +1,11 @@
 [versions]
-fabric-loader = "0.17.2"
+fabric-loader = "0.19.2"
 jcyo = "0.5.1"
 lombok = "1.18.38"
-loom = "1.15-SNAPSHOT"
 modPublisher = "2.1.8"
 
 [plugins]
 jcyo = { id = "de.siphalor.jcyo", version.ref = "jcyo" }
-loom = { id = "fabric-loom", version.ref = "loom" }
 modPublisher = { id = "com.hypherionmc.modutils.modpublisher", version.ref = "modPublisher" }
 
 [libraries]

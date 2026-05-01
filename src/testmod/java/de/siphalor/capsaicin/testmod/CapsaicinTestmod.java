@@ -7,14 +7,12 @@ import de.siphalor.capsaicin.api.food.FoodModifications;
 //- import de.siphalor.capsaicin.api.food.PlayerFoodModifier;
 //- import de.siphalor.capsaicin.api.food.PlayerFoodModifier;
 import net.fabricmc.api.ModInitializer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
+//- import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
 //- import net.minecraft.world.food.FoodProperties;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.consume_effects.ApplyStatusEffectsConsumeEffect;
@@ -83,11 +81,17 @@ public class CapsaicinTestmod implements ModInitializer {
 		});
 	}
 
-	private ResourceLocation createId(String path) {
-		//# if MC_VERSION_NUMBER >= 12100
-		return ResourceLocation.fromNamespaceAndPath("capsaicin-testmod", path);
-		//# else
-		//- return new ResourceLocation("capsaicin-testmod", path);
-		//# end
+	//# if MC_VERSION_NUMBER >= 12111
+	private Identifier createId(String path) {
+		return Identifier.fromNamespaceAndPath("capsaicin-testmod", path);
 	}
+	//# else
+	//- private ResourceLocation createId(String path) {
+	//- 	//# if MC_VERSION_NUMBER >= 12100
+	//- 	return ResourceLocation.fromNamespaceAndPath("capsaicin-testmod", path);
+	//- 	//# else
+	//- 	return new ResourceLocation("capsaicin-testmod", path);
+	//- 	//# end
+	//- }
+	//# end
 }
