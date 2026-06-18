@@ -16,7 +16,14 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 //# if MC_VERSION_NUMBER >= 12005
 @Mixin(ItemInHandRenderer.class)
 public class MixinItemInHandRenderer {
-	@Inject(method = "renderArmWithItem", at = @At("HEAD"))
+	@Inject(
+			//# if MC_VERSION_NUMBER >= 260200
+			method = "submitArmWithItem",
+			//# else
+			//- method = "renderArmWithItem",
+			//# end
+			at = @At("HEAD")
+	)
 	private void onRenderArmWithItem(
 			AbstractClientPlayer player,
 			float partialTick,
@@ -39,7 +46,14 @@ public class MixinItemInHandRenderer {
 		foodHandler.withUser(player).withStack(stack);
 	}
 
-	@Inject(method = "renderArmWithItem", at = @At("TAIL"))
+	@Inject(
+			//# if MC_VERSION_NUMBER >= 260200
+			method = "submitArmWithItem",
+			//# else
+			//- method = "renderArmWithItem",
+			//# end
+			at = @At("TAIL")
+	)
 	private void onRenderArmWithItemTail(CallbackInfo ci) {
 		FoodHandler.INSTANCE.get().reset();
 	}
