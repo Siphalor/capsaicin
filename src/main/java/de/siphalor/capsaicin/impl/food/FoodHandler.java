@@ -75,10 +75,9 @@ public class FoodHandler implements DynamicFoodPropertiesAccess {
 		Item item = stack.getItem();
 		if (item instanceof CamoFoodItem camoFoodItem) {
 			this.stack = camoFoodItem.getCamoFoodStack(stack, new CamoFoodContextImpl(user));
-			if (this.stack == null) {
-				return this;
+			if (this.stack != null) {
+				item = this.stack.getItem();
 			}
-			item = this.stack.getItem();
 		}
 
 		foodProperties = null;
