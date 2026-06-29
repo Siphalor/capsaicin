@@ -100,8 +100,8 @@ tasks.processResources {
 		filter<JsonMergeFilterReader>(mapOf("merge" to mapOf(
 			"version" to project.version,
 			"breaks" to mapOf("minecraft" to listOf(
-				smcmtk.mcProps.getting("minecraft.version.greaterThanOrEqual").get(),
-				smcmtk.mcProps.getting("minecraft.version.lessThan").get(),
+				"<${smcmtk.mcProps.getting("minecraft.version.greaterThanOrEqual").get()}",
+				">=${smcmtk.mcProps.getting("minecraft.version.lessThan").get()}",
 			)),
 		)))
 	}
