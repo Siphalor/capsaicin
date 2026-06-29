@@ -5,7 +5,7 @@
 
 # Capsaicin
 
-![supported Minecraft versions: 1.20 | 1.21](https://img.shields.io/badge/support%20for%20MC-1.20%20%7C%201.21-%2356AD56?style=for-the-badge)
+![supported Minecraft versions: 1.20 | 1.21 | 26.1 | 26.2](https://img.shields.io/badge/support%20for%20MC-1.20%20%7C%201.21%20%7C%2026.1%20%7C%2026.2-%2356AD56?style=for-the-badge)
 
 [![latest maven release](https://img.shields.io/maven-metadata/v?color=0f9fbc&metadataUrl=https%3A%2F%2Fmaven.siphalor.de%2Fde%2Fsiphalor%2Fcapsaicin%2Fcapsaicin-mc1.21.10%2Fmaven-metadata.xml&style=flat-square)](https://maven.siphalor.de/de/siphalor/capsaicin/)
 
@@ -48,6 +48,8 @@ A brief overview of the supported Minecraft versions and corresponding artifact 
 | 1.21.2–1.21.4     | `capsaicin-mc1.21.3`  |
 | 1.21.5–1.21.8     | `capsaicin-mc1.21.5`  |
 | 1.21.9–1.21.11    | `capsaicin-mc1.21.10` |
+| 26.1-26.1.2       | `capsaicin-mc26.1.2`  |
+| 26.2              | `capsaicin-mc26.2.0`  |
 
 ### API
 
