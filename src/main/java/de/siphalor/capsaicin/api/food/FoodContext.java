@@ -38,4 +38,24 @@ public interface FoodContext {
 	 * @return the saturation modifier
 	 */
 	float originalFoodSaturationModifier();
+
+	//# if MC_VERSION_NUMBER >= 12102
+	/**
+	 * The consume duration in seconds <b>before any modifications</b>.
+	 * @return the consume duration in fractional seconds
+	 */
+	float originalFoodConsumeDurationSeconds();
+	//# elif MC_VERSION_NUMBER >= 12005
+	//- /**
+	//-  * The consume duration in seconds <b>before any modifications</b>.
+	//-  * @return the consume duration in fractional seconds
+	//-  */
+	//- float originalFoodEatingTimeSeconds();
+	//# else
+	//- /**
+	//-  * The eating time in ticks <b>before any modifications</b>.
+	//-  * @return the consume duration in game ticks
+	//-  */
+	//- int originalFoodEatingTimeTicks();
+	//# end
 }

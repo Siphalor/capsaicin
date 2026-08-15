@@ -6,9 +6,12 @@ import de.siphalor.capsaicin.api.food.FoodProperties;
 import de.siphalor.capsaicin.impl.client.polymer.PolymerProxy;
 import de.siphalor.capsaicin.impl.food.FoodContextImpl;
 import de.siphalor.capsaicin.impl.food.properties.FoodPropertiesImpl;
+import de.siphalor.capsaicin.impl.util.IItemStack;
 import net.fabricmc.loader.api.FabricLoader;
 import squeek.appleskin.api.AppleSkinApi;
 import squeek.appleskin.api.event.FoodValuesEvent;
+
+//- import java.util.Optional;
 //- import squeek.appleskin.api.food.FoodValues;
 
 //- import java.util.ArrayList;
@@ -42,6 +45,20 @@ public class AppleSkinPlugin implements AppleSkinApi {
 			//- );
 			//- FoodValues defaultFoodValues = event.defaultFoodValues;
 			//# end
+			//# if MC_VERSION_NUMBER >= 12102
+			float defaultConsumeDuration = ((IItemStack)(Object) event.itemStack)
+					.capsaicin$getVanillaConsumableComponent().consumeSeconds();
+			//# elif MC_VERSION_NUMBER >= 12005
+			//- float defaultConsumeDuration =
+			//- 		Optional.ofNullable((IItemStack)(Object) event.itemStack)
+			//- 				.map(IItemStack::capsaicin$getVanillaFoodComponent)
+			//- 				.map(net.minecraft.world.food.FoodProperties::eatDurationTicks)
+			//- 				.orElse(0);
+			//# else
+			//- // ItemStack#getUseDuration yields the modified consume duration
+			//- int defaultConsumeDuration = event.itemStack.getItem().getUseDuration(event.itemStack);
+			//# end
+
 			FoodContext context = new FoodContextImpl(
 					event.itemStack,
 					null,
@@ -52,6 +69,7 @@ public class AppleSkinPlugin implements AppleSkinApi {
 					//- defaultFoodValues.hunger,
 					//- defaultFoodValues.saturationModifier,
 					//# end
+					defaultConsumeDuration,
 					event.player
 			);
 			FoodProperties newFoodProperties = FoodModifications.PROPERTIES_MODIFIERS.apply(foodProperties, context);

@@ -104,7 +104,7 @@ public class FoodHandler implements DynamicFoodPropertiesAccess {
 		}
 		//# if MC_VERSION_NUMBER < 12005
 		//- if (item != null) {
-		//- 	// Must not call stack.getMaxUseTime() here!
+		//- 	// Must not call stack.getUseDuration() here!
 		//- 	// This would cause a stack overflow
 		//- 	this.eatingTime = item.getUseDuration(this.stack);
 		//- } else {
@@ -149,11 +149,20 @@ public class FoodHandler implements DynamicFoodPropertiesAccess {
 	}
 
 	public FoodContext createContext() {
+		//# if MC_VERSION_NUMBER >= 12102
+		float consumeDuration = consumableProperties == null ? 0F : consumableProperties.getConsumeSeconds();
+		//# elif MC_VERSION_NUMBER >= 12005
+		//- float consumeDuration = Optional.ofNullable(stackFoodComponent)
+		//- 		.map(net.minecraft.world.food.FoodProperties::eatSeconds)
+		//- 		.orElse(0F);
+		//# else
+		//- int consumeDuration = eatingTime;
+		//# end
 		if (foodProperties == null) {
 			//# if MC_VERSION_NUMBER >= 12005
-			return new FoodContextImpl(stack, blockState, 0, 0, user);
+			return new FoodContextImpl(stack, blockState, 0, 0, consumeDuration, user);
 			//# else
-			//- return new FoodContextImpl(stack, blockState, 0, 0, user);
+			//- return new FoodContextImpl(stack, blockState, 0, 0, consumeDuration, user);
 			//# end
 		}
 		return new FoodContextImpl(
@@ -161,6 +170,7 @@ public class FoodHandler implements DynamicFoodPropertiesAccess {
 				blockState,
 				foodProperties.getHunger(),
 				foodProperties.getSaturationModifier(),
+				consumeDuration,
 				user
 		);
 	}
