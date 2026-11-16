@@ -318,7 +318,7 @@ public class FoodHandler implements DynamicFoodPropertiesAccess {
 	//# if MC_VERSION_NUMBER >= 12102
 	//# elif MC_VERSION_NUMBER >= 12005
 	//- public float calcModifiedEatingTimeSeconds(float eatingTime, FoodContext foodContext) {
-		//- return FoodModifications.EATING_TIME_SECONDS_MODIFIERS.apply(eatingTime, foodContext);
+	//- 	return FoodModifications.EATING_TIME_SECONDS_MODIFIERS.apply(eatingTime, foodContext);
 	//- }
 	//# else
 	//- @Override

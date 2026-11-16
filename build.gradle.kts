@@ -10,11 +10,11 @@ plugins {
 	alias(libs.plugins.modPublisher)
 }
 
-val minecraftVersionDescriptor = project.properties["minecraft.version.descriptor"] as String
+val minecraftVersionDescriptor = project.property("minecraft.version.descriptor") as String
 
 group = "de.siphalor.${project.name}"
 val archivesBaseName = "${project.name}-mc${minecraftVersionDescriptor}"
-val shortVersion = "${properties["version"]}"
+val shortVersion = "${property("version")}"
 version = "${shortVersion}+mc${mcLibs.versions.minecraft.get()}"
 
 repositories {
@@ -42,7 +42,7 @@ repositories {
 	}
 }
 
-val testmod: SourceSet by sourceSets.creating {
+val testmod = sourceSets.register("testmod") {
 	compileClasspath += sourceSets.main.get().compileClasspath
 	runtimeClasspath += sourceSets.main.get().runtimeClasspath
 }
@@ -51,15 +51,15 @@ loom {
 	runs {
 		create("testmodClient") {
 			client()
-			name("Testmod Client")
-			source(testmod)
+			displayName = "Testmod Client"
+			sourceSet = "testmod"
 		}
 	}
 }
 
 smcmtk {
 	useMojangMappings()
-	createModConfigurations(listOf(sourceSets.main.get(), testmod))
+	createModConfigurations(listOf(sourceSets.main.get(), testmod.get()))
 }
 
 dependencies {

@@ -72,9 +72,9 @@ public class MixinCakeBlock {
 			//- hungerManager.eat(foodComponent.getNutrition(), foodComponent.getSaturationModifier());
 			//- RandomSource random = user.getRandom();
 			//- for (Pair<MobEffectInstance, Float> effect : foodComponent.getEffects()) {
-				//- if (random.nextFloat() < effect.getSecond()) {
-					//- user.addEffect(effect.getFirst());
-				//- }
+			//- 	if (random.nextFloat() < effect.getSecond()) {
+			//- 		user.addEffect(effect.getFirst());
+			//- 	}
 			//- }
 			//# end
 			FoodEvents.EATEN.emit(new EatenEvent(foodHandler.createContext()));
