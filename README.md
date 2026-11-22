@@ -38,18 +38,20 @@ dependencies {
 
 ```
 
-A brief overview of the supported Minecraft versions and corresponding artifact ids:
+The following provides a brief overview of the supported Minecraft versions and corresponding artifact ids.  
+To find out about the latest mod version, check the badge at the top or follow the links on the corresponding artifact id.
 
-| Minecraft Version | Artifact Id           |
-|-------------------|-----------------------|
-| 1.20–1.20.3       | `capsaicin-mc1.20.4`  |
-| 1.20.4            | _Unsupported_         |
-| 1.21–1.21.1       | `capsaicin-mc1.21.1`  |
-| 1.21.2–1.21.4     | `capsaicin-mc1.21.3`  |
-| 1.21.5–1.21.8     | `capsaicin-mc1.21.5`  |
-| 1.21.9–1.21.11    | `capsaicin-mc1.21.10` |
-| 26.1-26.1.2       | `capsaicin-mc26.1.2`  |
-| 26.2              | `capsaicin-mc26.2.0`  |
+| Minecraft Version | Artifact Id                                                                                   |
+|-------------------|-----------------------------------------------------------------------------------------------|
+| 1.20–1.20.3       | [`capsaicin-mc1.20.4`](https://maven.siphalor.de/de/siphalor/capsaicin/capsaicin-mc1.20.4/)   |
+| 1.20.4            | _Unsupported_                                                                                 |
+| 1.21–1.21.1       | [`capsaicin-mc1.21.1`](https://maven.siphalor.de/de/siphalor/capsaicin/capsaicin-mc1.21.1/)   |
+| 1.21.2–1.21.4     | [`capsaicin-mc1.21.3`](https://maven.siphalor.de/de/siphalor/capsaicin/capsaicin-mc1.21.3/)   |
+| 1.21.5–1.21.8     | [`capsaicin-mc1.21.5`](https://maven.siphalor.de/de/siphalor/capsaicin/capsaicin-mc1.21.5/)   |
+| 1.21.9–1.21.11    | [`capsaicin-mc1.21.10`](https://maven.siphalor.de/de/siphalor/capsaicin/capsaicin-mc1.21.10/) |
+| 26.1-26.1.2       | [`capsaicin-mc26.1.2`](https://maven.siphalor.de/de/siphalor/capsaicin/capsaicin-mc26.1.2/)   |
+| 26.2              | [`capsaicin-mc26.2.0`](https://maven.siphalor.de/de/siphalor/capsaicin/capsaicin-mc26.2.0/)   |
+| 26.3              | [`capsaicin-mc26.3.0`](https://maven.siphalor.de/de/siphalor/capsaicin/capsaicin-mc26.3.0/)   |
 
 ### API
 
