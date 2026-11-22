@@ -106,10 +106,14 @@ tasks.processResources {
 		)))
 	}
 
+	fun extractMixinsFromProp(prop: String): List<String> {
+		return smcmtk.mcProps.getting(prop).get().split(",").map { it.trim() }.filter { it.isNotBlank() }
+	}
+
 	filesMatching("capsaicin.mixins.json") {
 		filter<JsonMergeFilterReader>(mapOf("merge" to mapOf(
-			"client" to smcmtk.mcProps.getting("mixins.extra.client").map { it.split(", ") }.get(),
-			"mixins" to smcmtk.mcProps.getting("mixins.extra.common").map { it.split(", ") }.get(),
+			"client" to extractMixinsFromProp("mixins.extra.client"),
+			"common" to extractMixinsFromProp("mixins.extra.common"),
 		)))
 	}
 }

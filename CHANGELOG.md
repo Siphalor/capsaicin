@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Expose consume duration in `FoodContext`
 
+### Fixed
+
+- Fixed empty mixin entries mistakenly being added on some older Minecraft versions
+
 ## [1.4.4] - 2026-06-29
 
 ### Fixed
